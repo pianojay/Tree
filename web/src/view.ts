@@ -81,6 +81,10 @@ export abstract class View<S extends BaseState> {
 
   async poll(force = false) {
     const s = await get<S>(`/api/${this.kind}/state`);
+    if (!s.cfg) {   // the page was rebuilt but the server still runs older code
+      this.el.stat.textContent = "⚠ The server is running older code than this page. Restart it (uvicorn server:app).";
+      return;
+    }
     const changed = force || !this.state || s.step !== this.state.step || s.dataset !== this.state.dataset;
     this.state = s;
     (this.el.dataset as HTMLSelectElement).value = s.dataset;
