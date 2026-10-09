@@ -1,0 +1,14 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
+
+# Outputs
+runs/
+
+# Local tool settings
+.claude/settings.local.json

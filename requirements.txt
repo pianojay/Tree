@@ -1,0 +1,6 @@
+# CPU only. On Windows the PyPI torch wheel is CPU-only; elsewhere use
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+numpy
+torch
+fastapi
+uvicorn[standard]
