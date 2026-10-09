@@ -1,0 +1,66 @@
+:root {
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --hairline: #e1e0d9;
+  --border: rgba(11, 11, 11, 0.1);
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--page);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+.top {
+  display: flex; align-items: center; gap: 24px;
+  padding: 10px 20px; border-bottom: 1px solid var(--border); background: var(--surface);
+}
+.top h1 { font-size: 18px; margin: 0; letter-spacing: 0.02em; }
+.top nav { display: flex; gap: 4px; }
+
+button, select {
+  font: inherit; font-size: 13px; color: var(--ink);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 10px; cursor: pointer;
+}
+button:hover { background: #f0efec; }
+button.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+.tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+main { padding: 16px 20px; }
+.view { display: none; }
+.view.active { display: block; }
+
+.controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin-bottom: 14px; font-size: 13px; color: var(--ink-2);
+}
+.controls label { display: inline-flex; align-items: center; gap: 6px; }
+.controls .stat { margin-left: auto; font-variant-numeric: tabular-nums; }
+
+/* left column fits a 520px plane plus card padding; right column takes the rest */
+.grid { display: grid; grid-template-columns: 546px minmax(0, 1fr); gap: 16px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 12px;
+}
+.card h2 { font-size: 13px; font-weight: 600; margin: 0 0 2px; }
+.card .sub { font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+
+.ll-bar { display: flex; height: 18px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--surface); }
+.ll-bar span { display: block; height: 100%; }
+.ll-legend { display: flex; gap: 14px; font-size: 12px; color: var(--ink-2); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+.readout { font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; min-height: 1.4em; }
+canvas.gallery { display: block; }
+.hint { font-size: 12px; color: var(--muted); }
+input[type="range"] { width: 160px; }
