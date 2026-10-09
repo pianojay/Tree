@@ -90,6 +90,19 @@ Each entry records **what** was decided, **why**, and **where it came from**.
 - **Source:** [User], Review 1
 - **Decision:** color is a map from the pixel value to a hue arc that does not close on itself (from $[0,1]$, or from $\mathbb R$ through a squashing map). It can be adjusted later. Color-vision accessibility is not a design input. Neither is audience.
 
+### D14. Planes are equal-level, equal-size views joined by their maps
+
+- **Source:** [User], Review 5
+- **Decision:** data and latent planes (and every stage of a flow) are drawn at the same size, side by side, with an arrow naming the map between them. They are views of one construction, not separate entities.
+- **VAE:** two layouts: three planes (x → q(z|x) → z → p(x|z) → x̂) or two planes (data and model sharing x).
+- **Flow:** one plane per stage, base to data; the number of layers is a knob.
+
+### D15. A "tree" dataset, and pixel 2 drawn desaturated
+
+- **Source:** [User], Review 5
+- **Decision:** a toy dataset that actually correlates with trees (green or yellow crown, orange trunk). Pixel 2 is rendered desaturated and darker everywhere, so orange reads as brown.
+- The Tree gallery is removed for now; the "generate a tree" story comes later.
+
 ## Open
 
 ### D13. $\mathbb R^d$ vs. $[0,1]^d$, and what replaces "the Gaussian"
@@ -103,6 +116,10 @@ Each entry records **what** was decided, **why**, and **where it came from**.
 - **Circular / toroidal sample space** (D2).
 - **Audience-specific design** and **color-vision accessibility** (Review 1).
 - **Engineering:** architectures, training tricks, performance.
+
+## Ideas, parked
+
+- **3D view, like classic CNN diagrams** [User, Review 5]: the planes stacked in depth, with strings connecting each point to its image in the next plane. Especially interesting for comparing normalized flows (bijective strings) with GANs (strings that merge). Needs a different UI framework; not now.
 
 ## Superseded
 
@@ -178,3 +195,14 @@ These were spontaneous choices made while drafting v0.1 of the whitepaper. They 
 2. **CPU only,** but libraries are welcome where they are better. Dependency minimalism is not the first concern.
 3. **Git:** track Tree as a **private** GitHub repository. Pushing the documents is fine.
 4. **Location:** the project moved to `D:\Claude\Tree`, because Windows Defender's Controlled Folder Access blocked shell tools from writing under `Documents`. The old copy in `Documents` is stale.
+
+### Review 5 (2026-10-09), by the owner, after trying the AR and VAE demo
+
+1. Planes must be equal size and visibly equal-level, with arrows for the transforms. VAE: offer a three-plane layout (x → z → x̂) next to the current one. The AR layout is fine for now.
+2. Pitch, not now: a 3D view with strings between planes (see "Ideas, parked").
+3. Shrink the β range and include β = 0.
+4. The blue density hue needs an on-screen description and a toggle.
+5. Performance is a bit of an issue; acceptable for now.
+6. Add a selector for the number of mixture components K.
+7. Next: normalizing flows (affine coupling = autoregressive flow in 2D; layers composed in a chain, one plane per stage) and GAN (MLP generator and discriminator). Use an X-shaped distribution to show why composition and permutation are needed (Murphy, PML: Advanced Topics, fig. 23).
+8. More diverse datasets (periodic and other typical ML demo shapes); remove the Tree gallery; add a tree-correlated dataset (green and orange, pixel 2 rendered as brown).

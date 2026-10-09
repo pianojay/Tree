@@ -15,17 +15,19 @@ from pydantic import BaseModel
 
 from tree.data import DATASETS, WINDOW, sample
 from tree.models.ar import AR
+from tree.models.flow import Flow
+from tree.models.gan import GAN
 from tree.models.vae import VAE
 
 torch.set_num_threads(2)
 
-N_TRAIN = 2000       # training set: a finite subset of p_data
-N_SHOW = 600         # points sent to the page
-GRID = 64            # density grid resolution
-SNAP_EVERY = 20      # training steps between snapshots
+N_TRAIN = 2000        # training set: a finite subset of p_data
+N_SHOW = 500          # points sent to the page
+SNAP_SECONDS = 0.35   # snapshot at most this often while training
 MAX_STEPS = 20000
 
-AXIS = torch.linspace(WINDOW[0], WINDOW[1], GRID)
+AXIS = torch.linspace(WINDOW[0], WINDOW[1], 64)
+AXIS_SMALL = torch.linspace(WINDOW[0], WINDOW[1], 48)
 FINE = torch.linspace(WINDOW[0], WINDOW[1], 161)
 
 
@@ -35,29 +37,51 @@ def r(t, nd=3):
     return np.round(a.astype(float), nd).tolist()
 
 
-class Trainer:
-    """Owns one model; trains it in a background thread; serves snapshots."""
+def grid_points(axis):
+    g1, g2 = torch.meshgrid(axis, axis, indexing="xy")
+    return torch.stack([g1.reshape(-1), g2.reshape(-1)], 1)  # row-major: rows = x2
 
-    def __init__(self, kind):
-        self.kind = kind
+
+def latent_grid_lines(lo=-2.5, hi=2.5, n_lines=11, n_pts=61, span=3.0):
+    along = torch.linspace(-span, span, n_pts)
+    lines = []
+    for t in torch.linspace(lo, hi, n_lines):
+        lines.append(torch.stack([torch.full_like(along, t), along], 1))
+        lines.append(torch.stack([along, torch.full_like(along, t)], 1))
+    return lines
+
+
+class Session:
+    """One model family: owns the model, trains it in a thread, serves snapshots."""
+    kind = ""
+    default_cfg: dict = {}
+
+    def __init__(self):
         self.lock = threading.Lock()
         self.running = False
         self.thread = None
+        self.cfg = dict(self.default_cfg)
         self.reset("multimodal")
 
-    # --- lifecycle ---------------------------------------------------------
+    # --- lifecycle -------------------------------------------------------------
 
-    def reset(self, dataset, beta=None):
+    def reset(self, dataset, cfg=None):
+        self.pause()
         with self.lock:
+            if cfg:
+                self.cfg.update(cfg)
             torch.manual_seed(0)
             self.dataset = dataset
             self.data = torch.tensor(sample(dataset, N_TRAIN, seed=0))
-            self.model = AR() if self.kind == "ar" else VAE()
-            self.opt = torch.optim.Adam(self.model.parameters(), lr=3e-3)
-            self.beta = 1.0 if beta is None else beta
             self.step = 0
             self.history = []
-            self.snapshot = self._make_snapshot()
+            self.build()
+            self.snapshot = self._snapshot()
+
+    def configure(self, cfg):
+        """Live changes that do not need a rebuild."""
+        with self.lock:
+            self.cfg.update(cfg)
 
     def start(self):
         if self.running:
@@ -68,73 +92,179 @@ class Trainer:
 
     def pause(self):
         self.running = False
+        if self.thread and self.thread is not threading.current_thread():
+            self.thread.join(timeout=3)
+        self.thread = None
 
     def _loop(self):
+        last, cost = 0.0, 0.0
         while self.running and self.step < MAX_STEPS:
             with self.lock:
-                for _ in range(SNAP_EVERY):
-                    self._train_step()
-                self.snapshot = self._make_snapshot()
-            time.sleep(0.01)  # let queries in
+                for _ in range(5):
+                    vals = self.train_step()
+                    self.step += 1
+                    if self.step % 5 == 0:
+                        self.history.append([self.step] + [None if v is None else round(float(v), 4) for v in vals])
+                # snapshot often, but never spend more than about a third of the time on it
+                if time.perf_counter() - last > max(SNAP_SECONDS, 2 * cost):
+                    t0 = time.perf_counter()
+                    self.snapshot = self._snapshot()
+                    last = time.perf_counter()
+                    cost = last - t0
+            time.sleep(0.001)  # let queries in
+        with self.lock:
+            self.snapshot = self._snapshot()
         self.running = False
 
-    def _train_step(self):
-        batch = self.data[torch.randint(0, len(self.data), (256,))]
-        if self.kind == "ar":
-            loss = self.model.loss(batch)
-            rec = kl = None
-        else:
-            loss, rec, kl = self.model.loss(batch, self.beta)
-        self.opt.zero_grad()
-        loss.backward()
-        self.opt.step()
-        self.step += 1
-        if self.step % 5 == 0:
-            row = [self.step, round(loss.item(), 4)]
-            if rec is not None:
-                row += [round(rec.item(), 4), round(kl.item(), 4)]
-            self.history.append(row)
+    def batch(self, n=256):
+        return self.data[torch.randint(0, len(self.data), (n,))]
 
-    # --- snapshots ---------------------------------------------------------
-
-    def _make_snapshot(self):
+    def _snapshot(self):
         self.model.eval()
         snap = {"kind": self.kind, "dataset": self.dataset, "step": self.step,
-                "running": self.running, "history": self.history[-2000:],
-                "window": WINDOW, "data": r(self.data[:N_SHOW])}
-        if self.kind == "ar":
-            snap.update(
-                axis=r(AXIS), density=r(self.model.density_grid(AXIS), 4),
-                fine=r(FINE), marginal1=r(self.model.marginal1(FINE), 4),
-                samples=r(self.model.sample(N_SHOW)),
-            )
-        else:
-            with torch.no_grad():
-                mu, log_var = self.model.encode(self.data[:N_SHOW])
-                snap.update(
-                    beta=self.beta, sigma_x=r(self.model.sigma_x()),
-                    samples=r(self.model.sample(N_SHOW)),
-                    latent_mu=r(mu), latent_sigma=r((0.5 * log_var).exp()),
-                    kl_points=r(0.5 * (mu ** 2 + log_var.exp() - 1 - log_var).sum(-1)),
-                    grid_lines=self._decoder_grid(),
-                )
+                "history": self.history[-3000:], "window": WINDOW, "cfg": dict(self.cfg),
+                "data": r(self.data[:N_SHOW])}
+        with torch.no_grad():
+            snap.update(self.extra())
         self.model.train()
         return snap
 
-    @torch.no_grad()
-    def _decoder_grid(self):
-        """Pushforward of latent grid lines through the decoder mean."""
-        ticks = torch.linspace(-2.5, 2.5, 11)
-        along = torch.linspace(-3, 3, 61)
-        lines = []
-        for t in ticks:
-            for z in (torch.stack([torch.full_like(along, t), along], 1),
-                      torch.stack([along, torch.full_like(along, t)], 1)):
-                lines.append(r(self.model.decode(z)))
-        return lines
+    # --- per family ------------------------------------------------------------
+
+    def build(self): raise NotImplementedError
+    def train_step(self): raise NotImplementedError
+    def extra(self): return {}
 
 
-trainers = {"ar": Trainer("ar"), "vae": Trainer("vae")}
+class ARSession(Session):
+    kind = "ar"
+    default_cfg = {"k": 8}
+
+    def build(self):
+        self.model = AR(k=int(self.cfg["k"]))
+        self.opt = torch.optim.Adam(self.model.parameters(), lr=3e-3)
+
+    def train_step(self):
+        loss = self.model.loss(self.batch())
+        self.opt.zero_grad(); loss.backward(); self.opt.step()
+        return [loss.item()]
+
+    def extra(self):
+        return {"axis": r(AXIS), "density": r(self.model.density_grid(AXIS), 4),
+                "fine": r(FINE), "marginal1": r(self.model.marginal1(FINE), 4),
+                "samples": r(self.model.sample(N_SHOW))}
+
+
+class VAESession(Session):
+    kind = "vae"
+    default_cfg = {"beta": 1.0}
+
+    def build(self):
+        self.model = VAE()
+        self.opt = torch.optim.Adam(self.model.parameters(), lr=3e-3)
+
+    def train_step(self):
+        loss, rec, kl = self.model.loss(self.batch(), float(self.cfg["beta"]))
+        self.opt.zero_grad(); loss.backward(); self.opt.step()
+        return [loss.item(), rec.item(), kl.item()]
+
+    def extra(self):
+        mu, log_var = self.model.encode(self.data[:N_SHOW])
+        return {
+            "sigma_x": r(self.model.sigma_x()),
+            "samples": r(self.model.sample(N_SHOW)),
+            "latent_mu": r(mu), "latent_sigma": r((0.5 * log_var).exp()),
+            "kl_points": r(0.5 * (mu ** 2 + log_var.exp() - 1 - log_var).sum(-1)),
+            "grid_lines": [r(self.model.decode(z)) for z in latent_grid_lines()],
+        }
+
+
+class FlowSession(Session):
+    kind = "flow"
+    default_cfg = {"layers": 3, "permute": True}
+
+    def build(self):
+        self.model = Flow(int(self.cfg["layers"]), bool(self.cfg["permute"]))
+        self.opt = torch.optim.Adam(self.model.parameters(), lr=2e-3)
+
+    def train_step(self):
+        loss = self.model.loss(self.batch())
+        self.opt.zero_grad(); loss.backward(); self.opt.step()
+        return [loss.item()]
+
+    def extra(self):
+        f, n = self.model, self.model.n
+        pts = grid_points(AXIS_SMALL)
+        lines = latent_grid_lines(n_pts=41)
+        n_lines, n_pts = len(lines), len(lines[0])
+
+        grids = [torch.cat(lines)]                    # base grid pushed forward, stage by stage
+        for layer in f.layers:
+            grids.append(layer(grids[-1])[0])
+        datas = [self.data[:300]]                     # data mapped back, stage by stage
+        for layer in reversed(f.layers):
+            datas.append(layer.inverse(datas[-1])[0])
+        datas.reverse()
+
+        stages = [{
+            "density": r(f.log_prob_at(pts, k).exp().reshape(len(AXIS_SMALL), -1), 4),
+            "data": r(datas[k]),
+            "grid": r(grids[k].reshape(n_lines, n_pts, 2)),
+        } for k in range(n + 1)]
+        return {"axis": r(AXIS_SMALL), "stages": stages, "orders": f.orders,
+                "samples": r(f.sample(N_SHOW))}
+
+    def trace(self, stage, point):
+        """One point seen at every stage of the chain."""
+        f = self.model
+        with self.lock, torch.no_grad():
+            y = torch.tensor([point], dtype=torch.float32)
+            z, _ = f.pull(y, stage, 0)
+            return [r(f.push(z, 0, k)[0]) for k in range(f.n + 1)]
+
+
+class GANSession(Session):
+    kind = "gan"
+    default_cfg = {"d_steps": 1, "freeze_d": False, "freeze_g": False}
+
+    def build(self):
+        self.model = GAN()
+        betas = (0.5, 0.999)
+        self.opt_d = torch.optim.Adam(self.model.D.parameters(), lr=1e-3, betas=betas)
+        self.opt_g = torch.optim.Adam(self.model.G.parameters(), lr=1e-3, betas=betas)
+        g = torch.Generator().manual_seed(1)
+        self.z_show = torch.randn(N_SHOW, 2, generator=g)   # fixed latent points shown on the page
+
+    def train_step(self):
+        m, d_loss, g_loss = self.model, None, None   # a frozen player logs a gap, not 0
+        if not self.cfg["freeze_d"]:
+            for _ in range(int(self.cfg["d_steps"])):
+                d_loss = m.d_loss(self.batch(), m.G(torch.randn(256, 2)))
+                self.opt_d.zero_grad(); d_loss.backward(); self.opt_d.step()
+        if not self.cfg["freeze_g"]:
+            g_loss = m.g_loss(m.G(torch.randn(256, 2)))
+            self.opt_g.zero_grad(); g_loss.backward(); self.opt_g.step()
+        with torch.no_grad():
+            p_real = m.p_real(self.batch()).mean()
+            p_fake = m.p_real(m.G(torch.randn(256, 2))).mean()
+        item = lambda t: None if t is None else t.item()
+        return [item(d_loss), item(g_loss), p_real.item(), p_fake.item()]
+
+    def extra(self):
+        m = self.model
+        fake = m.G(self.z_show)
+        with torch.enable_grad():   # the generator's only signal: grad of log D at its samples
+            x = fake[:120].clone().requires_grad_(True)
+            torch.nn.functional.logsigmoid(m.D(x)).sum().backward()
+            grad = x.grad
+        for p in m.D.parameters():
+            p.grad = None
+        return {"axis": r(AXIS), "d_field": r(m.p_real(grid_points(AXIS)).reshape(len(AXIS), -1), 3),
+                "z": r(self.z_show), "fake": r(fake), "grad": r(grad, 4),
+                "grid_lines": [r(m.G(z)) for z in latent_grid_lines()]}
+
+
+sessions = {s.kind: s for s in (ARSession(), VAESession(), FlowSession(), GANSession())}
 app = FastAPI()
 
 
@@ -148,9 +278,9 @@ async def revalidate_pages(request, call_next):
 
 
 class Control(BaseModel):
-    action: str                 # start | pause | reset
+    action: str                  # start | pause | reset | config
     dataset: str | None = None
-    beta: float | None = None
+    config: dict | None = None
 
 
 @app.get("/api/datasets")
@@ -160,27 +290,24 @@ def datasets():
 
 @app.get("/api/{kind}/state")
 def state(kind: str):
-    t = trainers[kind]
-    with t.lock:
-        snap = dict(t.snapshot)
-    snap["running"] = t.running
+    s = sessions[kind]
+    with s.lock:
+        snap = dict(s.snapshot)
+    snap["running"] = s.running
     return snap
 
 
 @app.post("/api/{kind}/control")
 def control(kind: str, c: Control):
-    t = trainers[kind]
+    s = sessions[kind]
     if c.action == "start":
-        t.start()
+        s.start()
     elif c.action == "pause":
-        t.pause()
+        s.pause()
     elif c.action == "reset":
-        t.pause()
-        if t.thread:
-            t.thread.join(timeout=2)
-        t.reset(c.dataset or t.dataset, c.beta)
-    if c.beta is not None and c.action != "reset":
-        t.beta = c.beta          # live: change the tug of war while training
+        s.reset(c.dataset or s.dataset, c.config)
+    elif c.action == "config" and c.config:
+        s.configure(c.config)
     return {"ok": True}
 
 
@@ -188,26 +315,26 @@ def control(kind: str, c: Control):
 
 @app.get("/api/ar/conditional")
 def ar_conditional(x1: float):
-    t = trainers["ar"]
-    with t.lock:
-        p = t.model.conditional(x1, FINE)
-        p1 = t.model.marginal1(torch.tensor([x1]))
+    s = sessions["ar"]
+    with s.lock:
+        p = s.model.conditional(x1, FINE)
+        p1 = s.model.marginal1(torch.tensor([x1]))
     return {"x1": x1, "fine": r(FINE), "p": r(p, 4), "p1": float(p1[0])}
 
 
 @app.get("/api/ar/point")
 def ar_point(x1: float, x2: float):
-    t = trainers["ar"]
-    with t.lock, torch.no_grad():
-        lp1, lp2 = t.model.log_prob_parts(torch.tensor([[x1, x2]]))
+    s = sessions["ar"]
+    with s.lock, torch.no_grad():
+        lp1, lp2 = s.model.log_prob_parts(torch.tensor([[x1, x2]]))
     return {"lp1": float(lp1[0]), "lp2": float(lp2[0])}
 
 
 @app.get("/api/ar/sample_one")
 def ar_sample_one():
-    t = trainers["ar"]
-    with t.lock:
-        x = t.model.sample(1)[0]
+    s = sessions["ar"]
+    with s.lock:
+        x = s.model.sample(1)[0]
     return {"x1": float(x[0]), "x2": float(x[1])}
 
 
@@ -215,22 +342,51 @@ def ar_sample_one():
 
 @app.get("/api/vae/encode")
 def vae_encode(x1: float, x2: float):
-    t = trainers["vae"]
-    with t.lock, torch.no_grad():
-        mu, log_var = t.model.encode(torch.tensor([[x1, x2]]))
+    s = sessions["vae"]
+    with s.lock, torch.no_grad():
+        mu, log_var = s.model.encode(torch.tensor([[x1, x2]]))
         kl = 0.5 * (mu ** 2 + log_var.exp() - 1 - log_var).sum(-1)
-        rec = t.model.decode(mu)
+        rec = s.model.decode(mu)
+        sx = s.model.sigma_x()
+        eps = torch.randn(40, 2, generator=torch.Generator().manual_seed(7))
+        z = mu + (0.5 * log_var).exp() * eps            # reparameterization
+        xhat = s.model.decode(z)
     return {"mu": r(mu[0]), "sigma": r((0.5 * log_var[0]).exp()),
-            "kl": float(kl[0]), "recon": r(rec[0])}
+            "kl": float(kl[0]), "recon": r(rec[0]), "sigma_x": r(sx),
+            "eps": r(eps), "z": r(z), "xhat": r(xhat)}
 
 
 @app.get("/api/vae/decode")
 def vae_decode(z1: float, z2: float):
-    t = trainers["vae"]
-    with t.lock, torch.no_grad():
-        m = t.model.decode(torch.tensor([[z1, z2]]))
-        s = t.model.sigma_x()
-    return {"mean": r(m[0]), "sigma": r(s)}
+    s = sessions["vae"]
+    with s.lock, torch.no_grad():
+        m = s.model.decode(torch.tensor([[z1, z2]]))
+        sx = s.model.sigma_x()
+    return {"mean": r(m[0]), "sigma": r(sx)}
+
+
+# --- flow and GAN queries ----------------------------------------------------
+
+@app.get("/api/flow/trace")
+def flow_trace(stage: int, x1: float, x2: float):
+    return {"points": sessions["flow"].trace(stage, [x1, x2])}
+
+
+@app.get("/api/gan/generate")
+def gan_generate(z1: float, z2: float):
+    s = sessions["gan"]
+    with s.lock, torch.no_grad():
+        x = s.model.G(torch.tensor([[z1, z2]]))
+        p = s.model.p_real(x)
+    return {"x": r(x[0]), "p_real": float(p[0])}
+
+
+@app.get("/api/gan/discriminate")
+def gan_discriminate(x1: float, x2: float):
+    s = sessions["gan"]
+    with s.lock:
+        p = s.model.p_real(torch.tensor([[x1, x2]]))
+    return {"p_real": float(p[0])}
 
 
 dist = Path(__file__).parent / "web" / "dist"

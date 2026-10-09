@@ -61,6 +61,27 @@ main { padding: 16px 20px; }
 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
 
 .readout { font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; min-height: 1.4em; }
-canvas.gallery { display: block; }
 .hint { font-size: 12px; color: var(--muted); }
 input[type="range"] { width: 160px; }
+
+/* equal-size planes joined by the maps between them */
+.plane-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 14px; }
+.plane-unit { display: flex; align-items: center; gap: 6px; }
+.plane-card { flex: none; padding: 10px 10px 6px; }
+.plane-card .sub { min-height: 16px; }
+.arrow {
+  flex: none; width: 74px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 12px; color: var(--ink-2); text-align: center; line-height: 1.25;
+}
+.arrow .glyph { font-size: 28px; line-height: 1; color: var(--ink); }
+.arrow .back { color: var(--muted); }
+.info-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.info-row .card { flex: 1 1 340px; max-width: 560px; }
+.legend-list { margin: 0; padding-left: 0; list-style: none; font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+.legend-list .key { display: inline-block; width: 22px; text-align: center; margin-right: 6px; }
+.dens-swatch { display: inline-block; width: 22px; height: 10px; border-radius: 2px; vertical-align: -1px;
+  background: linear-gradient(90deg, #fcfcfb, #9ec5f4, #3987e5, #0d366b); border: 1px solid var(--border); }
+.div-swatch { display: inline-block; width: 22px; height: 10px; border-radius: 2px; vertical-align: -1px;
+  background: linear-gradient(90deg, #c0393a, #f0efec, #256abf); border: 1px solid var(--border); }
+.tree-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; vertical-align: 0;
+  background: hsl(120, 78%, 50%); box-shadow: 0 0 0 2px hsl(30, 45%, 32%); }
