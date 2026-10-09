@@ -1,6 +1,6 @@
 # Substrate Audit: Lighter Installs and a Monolithic Build
 
-**Status:** Audit for a decision (2026-10-09). Nothing has changed in the code.
+**Status:** Audit (2026-10-09). Decided in Review 6 (D16): keep the current substrate; tininess is an optional later effort.
 **Parent:** [whitepaper.md](../whitepaper.md) · **Asked in:** owner's request after Review 5
 
 The question: can Tree run with a much smaller install than PyTorch, and could it ship as one self-contained program, like a game downloaded from itch.io?

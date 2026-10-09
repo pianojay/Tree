@@ -103,6 +103,13 @@ Each entry records **what** was decided, **why**, and **where it came from**.
 - **Decision:** a toy dataset that actually correlates with trees (green or yellow crown, orange trunk). Pixel 2 is rendered desaturated and darker everywhere, so orange reads as brown.
 - The Tree gallery is removed for now; the "generate a tree" story comes later.
 
+### D16. Python + Vite stays; tininess is a later, optional hobby
+
+- **Source:** [User], Review 6
+- **Decision:** keep PyTorch + FastAPI + the Vite page as the working substrate. The heavy install is an accepted price: for someone studying ML, downloading big files is justified.
+- **Not the goal:** users don't need to understand or follow the implementation. The product is the interactive visualization of mathematical and information-theoretic concepts working on stage, not the code behind it.
+- **Later, maybe:** a tiny footprint or one-step install (browser-native training, a C/WASM core, Rust, or knok; see [substrate-audit.md](substrate-audit.md)) is a "fancy" follow-up, not planned. The llm.c analogy means only "something that works can be tiny".
+
 ## Open
 
 ### D13. $\mathbb R^d$ vs. $[0,1]^d$, and what replaces "the Gaussian"
@@ -206,3 +213,10 @@ These were spontaneous choices made while drafting v0.1 of the whitepaper. They 
 6. Add a selector for the number of mixture components K.
 7. Next: normalizing flows (affine coupling = autoregressive flow in 2D; layers composed in a chain, one plane per stage) and GAN (MLP generator and discriminator). Use an X-shaped distribution to show why composition and permutation are needed (Murphy, PML: Advanced Topics, fig. 23).
 8. More diverse datasets (periodic and other typical ML demo shapes); remove the Tree gallery; add a tree-correlated dataset (green and orange, pixel 2 rendered as brown).
+
+### Review 6 (2026-10-09), by the owner, on the substrate audit
+
+1. Continue with Python + Vite as the "hobby"; it is proven to work. Carrying a heavy Python library is the accepted tradeoff, even though it goes against the "abstract nonsense" spirit.
+2. Making Tree tiny (file size or installation) is a possible later effort, probably over the top for now.
+3. Users need not follow the implementation; the point is interactive visualization of the concepts.
+4. The llm.c analogy meant "something working can be tiny", not "write everything by hand".
