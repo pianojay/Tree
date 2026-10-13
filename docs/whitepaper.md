@@ -1,11 +1,11 @@
 # Tree: A Generative-Model Microscope
 
 **Status:** Draft v0.3 · 2026-10-07 (after Reviews 1–2)
-**Origin:** Brainstorm of 2026-10-07 ([record](docs/brainstorm-log.md), [raw export](ChatGPT-Circle%20Representation%20Priors-20261007-2051.md)) · **Decisions:** [docs/decisions.md](docs/decisions.md)
+**Origin:** Brainstorm of 2026-10-07 ([record](brainstorm-log.md), [raw export](references/ChatGPT-Circle%20Representation%20Priors-20261007-2051.md)) · **Decisions:** [decisions.md](decisions.md)
 
-**Development restart (2026-10-13):** the owner requested a fresh implementation effort on `main`. The [development roadmap](docs/roadmap.md) governs that work; the TF.js and jax-js branches are referential. Professor Minhyuk Sung's separate VAE lab is [credited here](references/README.md).
+**Development restart (2026-10-13):** the owner requested a fresh implementation effort on `main`. The [development roadmap](roadmap.md) governs that work; the TF.js and jax-js branches are referential. Professor Minhyuk Sung's separate VAE lab is [credited here](references/README.md).
 
-**Current implementation:** Phases 1–5 use the setup of `main`, a TensorFlow.js WASM worker and Canvas views, with the original PyTorch server supported. AR, VAE, flow and existing GAN mechanics are implemented; the other three families remain pending. [Comparison and verification](docs/runtime-comparison.md).
+**Current implementation:** Phases 1–5 use the setup of `main`, a TensorFlow.js WASM worker and Canvas views, with the original PyTorch server supported. AR, VAE, flow and existing GAN mechanics are implemented; the other three families remain pending. [Comparison and verification](runtime-comparison.md).
 
 > Make $p_{\text{data}}$ simple enough to see, but complicated enough that learning it is nontrivial.
 
@@ -44,15 +44,15 @@ Four commitments:
 ## 2. The Tree world
 
 - **Pixels.** 2 pixels is the primary case, so every model can be drawn on one square. 1 and 3 pixels come later; how to show them is deliberately left open.
-- **Sample space.** Euclidean. Circular hue (a torus) is **out of scope**, because its geometry would contaminate the comparison ([background](docs/background-circular-variables.md)). Whether it is $\mathbb R^d$ or $[0,1]^d$, and what then plays the role of "the Gaussian", is still **under scrutiny** ([sample space and priors](docs/sample-space-and-priors.md)). The current leaning is $\mathbb R^d$, so every family's math stays textbook.
+- **Sample space.** Euclidean. Circular hue (a torus) is **out of scope**, because its geometry would contaminate the comparison ([background](background-circular-variables.md)). Whether it is $\mathbb R^d$ or $[0,1]^d$, and what then plays the role of "the Gaussian", is still **under scrutiny** ([sample space and priors](sample-space-and-priors.md)). The current leaning is $\mathbb R^d$, so every family's math stays textbook.
 - **Display.** A scalar-to-hue map onto an arc that doesn't close on itself (from $[0,1]$ directly, or from $\mathbb R$ through a squashing map). It is purely a rendering, can be adjusted freely, and never enters any model.
-- **Ground truth.** $p_{\text{data}}$ is a *sampling program*. It is curated to be challenging, versioned, and iterated, never fixed early. Training data is a finite subset of it. There is a ladder of versions: **simple** (to check that models learn at all), **multimodal**, and **challenging** (the actual object of study). Details: [ground truth](docs/ground-truth.md).
+- **Ground truth.** $p_{\text{data}}$ is a *sampling program*. It is curated to be challenging, versioned, and iterated, never fixed early. Training data is a finite subset of it. There is a ladder of versions: **simple** (to check that models learn at all), **multimodal**, and **challenging** (the actual object of study). Details: [ground truth](ground-truth.md).
 
 Since we write the program, we know $p_{\text{data}}$ far better than any real dataset allows: unlimited samples, and in 2D a density estimate as precise as we want. That is the "microscope" luxury.
 
 ## 3. Model families
 
-There are seven families. Each is cut down to its **crux map**, the map it actually learns. The backbone doesn't matter: small networks on a CPU are enough. In a few dimensions, every crux map can be drawn, probed, and perturbed while it trains. Concepts become objects. Details and imagined "living objects" for each family: [model families](docs/model-families.md).
+There are seven families. Each is cut down to its **crux map**, the map it actually learns. The backbone doesn't matter: small networks on a CPU are enough. In a few dimensions, every crux map can be drawn, probed, and perturbed while it trains. Concepts become objects. Details and imagined "living objects" for each family: [model families](model-families.md).
 
 | Family | Crux map | What becomes alive |
 |---|---|---|
@@ -96,7 +96,7 @@ The guiding idea from the brainstorm: **every family on the same canvas**. For n
 
 - **Small implementations of the principles.** The fresh implementation follows `main`'s model setup and uses a TensorFlow.js WASM worker with Canvas views. The Python server remains supported; jax-js remains a comparison option. Browser use does not require Python. The pure-Python autodiff engine in `tree/` stays as a reference.
 - **Implementing before training.** The first job is implementing each principle and checking that its mechanics work on the simple ground truth. Training the models *well* is a separate, later problem.
-- **License:** MIT ([LICENSE](LICENSE)).
+- **License:** MIT ([LICENSE](../LICENSE)).
 
 ## 8. Scope
 
@@ -114,7 +114,7 @@ The guiding idea from the brainstorm: **every family on the same canvas**. For n
 
 This is iterative, not a sequence of fixed milestones.
 
-The [development roadmap](docs/roadmap.md) turns the research direction below into a fresh implementation sequence. It includes runtime selection, numerical verification, interactive model slices, and distribution of the application.
+The [development roadmap](roadmap.md) turns the research direction below into a fresh implementation sequence. It includes runtime selection, numerical verification, interactive model slices, and distribution of the application.
 
 1. **Simple ground truths** (simple, then multimodal), plus the crudest views needed to debug.
 2. **Minimal implementations** of the seven principles, each checked to *work* on the simple case.
@@ -137,11 +137,11 @@ The [development roadmap](docs/roadmap.md) turns the research direction below in
 
 | Document | Purpose |
 |---|---|
-| [docs/decisions.md](docs/decisions.md) | Decision log, review log, and withdrawn draft proposals |
-| [docs/roadmap.md](docs/roadmap.md) | Current development sequence for the fresh implementation on main |
+| [decisions.md](decisions.md) | Decision log, review log, and withdrawn draft proposals |
+| [roadmap.md](roadmap.md) | Current development sequence for the fresh implementation on main |
 | [references/README.md](references/README.md) | Credit for Professor Minhyuk Sung's VAE lab and historical experiment references |
-| [docs/ground-truth.md](docs/ground-truth.md) | What the ground truth is for and how it is kept: curated, versioned, a ladder |
-| [docs/sample-space-and-priors.md](docs/sample-space-and-priors.md) | Analysis: $\mathbb R^d$ vs. $[0,1]^d$, and candidate priors |
-| [docs/model-families.md](docs/model-families.md) | The seven crux maps, and how each family's concepts become live objects |
-| [docs/background-circular-variables.md](docs/background-circular-variables.md) | Static record: circular representations, von Mises, harmonics, why the torus is out of scope |
-| [docs/brainstorm-log.md](docs/brainstorm-log.md) | Static record of the originating brainstorm |
+| [ground-truth.md](ground-truth.md) | What the ground truth is for and how it is kept: curated, versioned, a ladder |
+| [sample-space-and-priors.md](sample-space-and-priors.md) | Analysis: $\mathbb R^d$ vs. $[0,1]^d$, and candidate priors |
+| [model-families.md](model-families.md) | The seven crux maps, and how each family's concepts become live objects |
+| [background-circular-variables.md](background-circular-variables.md) | Static record: circular representations, von Mises, harmonics, why the torus is out of scope |
+| [brainstorm-log.md](brainstorm-log.md) | Static record of the originating brainstorm |

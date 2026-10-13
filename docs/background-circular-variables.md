@@ -2,7 +2,7 @@
 
 **Status:** Static record. It summarizes the opening of the 2026-10-07 brainstorm, which led to Tree, and the topology concern that settled [decision D2](decisions.md#d2-euclidean-sample-space-circular-hue-deferred).
 After Review 1, circular and toroidal sample spaces are **out of scope**. This document is kept only as a record.
-**Parent:** [whitepaper.md](../whitepaper.md)
+**Parent:** [whitepaper.md](whitepaper.md)
 
 ---
 

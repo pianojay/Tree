@@ -1,8 +1,8 @@
 # Brainstorm Log: 2026-10-07
 
 **Status:** Static record. It summarizes the conversation where the Tree project began; it does not reproduce it word for word.
-**Source:** ChatGPT session "Circle Representation Priors", 13:16–14:11 local time. Raw export: [../ChatGPT-Circle Representation Priors-20261007-2051.md](../ChatGPT-Circle%20Representation%20Priors-20261007-2051.md)
-**Parent:** [whitepaper.md](../whitepaper.md)
+**Source:** ChatGPT session "Circle Representation Priors", 13:16–14:11 local time. [Raw conversation export](references/ChatGPT-Circle%20Representation%20Priors-20261007-2051.md).
+**Parent:** [whitepaper.md](whitepaper.md)
 
 ---
 

@@ -1,7 +1,7 @@
 # Ground Truth
 
 **Status:** Working notes. The ground truth is **deliberately not fixed**. It is curated and re-curated as the project goes.
-**Parent:** [whitepaper.md](../whitepaper.md)
+**Parent:** [whitepaper.md](whitepaper.md)
 
 ---
 

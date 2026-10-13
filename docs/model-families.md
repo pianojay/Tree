@@ -1,7 +1,7 @@
 # Model Families: Making the Concepts Alive
 
 **Status:** Working notes, Review 3.
-**Parent:** [whitepaper.md](../whitepaper.md)
+**Parent:** [whitepaper.md](whitepaper.md)
 
 **Provenance:** the quoted blocks are the owner's notes. Everything under "Living objects" is imagined by Claude, as candidate ideas rather than specifications.
 

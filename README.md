@@ -1,12 +1,12 @@
 # Tree
 
-A miniature for making the abstract mathematics of generative models explicit and visible. See [whitepaper.md](whitepaper.md).
+A miniature for making the abstract mathematics of generative models explicit and visible. See [whitepaper.md](docs/whitepaper.md).
 
-The rebuild through Phases 1–5 runs four model families in a TensorFlow.js WASM worker, with Canvas views and optional PyTorch server mode. See the [roadmap](docs/roadmap.md), [implementation contract](docs/implementation-contract.md), and [runtime comparison](docs/runtime-comparison.md). The historical TF.js and jax-js branches remain reference material.
+The rebuild through Phases 1–5 runs four model families in a TensorFlow.js WASM worker, with Canvas views and optional PyTorch server mode. See the [roadmap](docs/roadmap.md), [implementation contract](docs/implementation-contract.md), and [runtime comparison](docs/runtime-comparison.md). The historical TF.js and jax-js branches were deleted; their findings remain documented. See the [documentation index](docs/README.md) for reading material and development records.
 
 ## Reference VAE lab
 
-The separate [VAE interactive lab](references/vae_2d_lab.html) is by **Professor Minhyuk Sung, KAIST**, [mhsung@kaist.ac.kr](mailto:mhsung@kaist.ac.kr), created with Claude. See its [attribution and provenance](references/README.md). Tree was independently devised by its owner.
+The separate [VAE interactive lab](docs/references/vae_2d_lab.html) is by **Professor Minhyuk Sung, KAIST**, [mhsung@kaist.ac.kr](mailto:mhsung@kaist.ac.kr), created with Claude. See its [attribution and provenance](docs/references/README.md). Tree was independently devised by its owner.
 
 ## Requirements
 
@@ -64,4 +64,4 @@ The original pure-Python checks are retained:
 
 ## License
 
-Tree code: MIT. The separate VAE reference lab has its authorship recorded in [references/README.md](references/README.md).
+Tree code: MIT. The separate VAE reference lab has its authorship recorded in [references/README.md](docs/references/README.md).

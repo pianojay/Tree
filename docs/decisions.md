@@ -123,7 +123,7 @@ Each entry records **what** was decided, **why**, and **where it came from**.
 
 - **Source:** [User], 2026-10-13, supplying Professor Sung's September 15 announcement at 22:46 KST.
 - **Decision:** credit the single-file VAE interactive lab to Professor Minhyuk Sung, KAIST, [mhsung@kaist.ac.kr](mailto:mhsung@kaist.ac.kr), created with Claude.
-- **Record:** preserve a visibly credited copy and its [provenance](../references/README.md). The lab is separate from the independently devised Tree project.
+- **Record:** preserve a visibly credited copy and its [provenance](references/README.md). The lab is separate from the independently devised Tree project.
 
 ### D19. Implement through Phase 5 using the setup of main
 

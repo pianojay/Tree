@@ -1,7 +1,7 @@
 # Sample Space and Priors
 
 **Status:** Under review. Nothing here is decided yet (whitepaper Q1–Q3).
-**Parent:** [whitepaper.md](../whitepaper.md)
+**Parent:** [whitepaper.md](whitepaper.md)
 
 **Settled so far:** the sample space is **not circular**. That is out of scope; see [background-circular-variables.md](background-circular-variables.md).
 

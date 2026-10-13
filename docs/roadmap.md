@@ -13,7 +13,7 @@
 
 Tree will make the mathematics of generative models concrete and interactive in a small Euclidean world. The rebuild should preserve that purpose while making the demo easy to obtain and run. A reader should be able to inspect what a model represents, how its objective updates it, and how it samples, without needing to understand the implementation.
 
-The existing Python and Vite demo is the historical working baseline. The `bench/tfjs-vs-jaxjs` and `tfjs-ui` branches are referential only. Development starts from the requirements below; their implementations will not be merged as the foundation. Professor Minhyuk Sung's [VAE lab](../references/README.md) is credited separately as an interaction reference.
+The existing Python and Vite demo is the historical working baseline. The `bench/tfjs-vs-jaxjs` and `tfjs-ui` branches are referential only. Development starts from the requirements below; their implementations will not be merged as the foundation. Professor Minhyuk Sung's [VAE lab](references/README.md) is credited separately as an interaction reference.
 
 ## Purpose and scope
 

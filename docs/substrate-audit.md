@@ -1,7 +1,7 @@
 # Substrate Audit: Lighter Installs and a Monolithic Build
 
 **Status:** Audit (2026-10-09). Decided in Review 6 (D16): keep the current substrate; tininess is an optional later effort.
-**Parent:** [whitepaper.md](../whitepaper.md) · **Asked in:** owner's request after Review 5
+**Parent:** [whitepaper.md](whitepaper.md) · **Asked in:** owner's request after Review 5
 
 **Historical record:** these measurements and Review 6 describe the original pilot. The 2026-10-13 [development roadmap](roadmap.md) reopens runtime selection for the fresh implementation; the earlier measurements remain reference evidence.
 
