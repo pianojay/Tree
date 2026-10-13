@@ -4,6 +4,7 @@ This branch starts from main commit `7a504a3` and ports the four existing famili
 
 - [Contract](contract.md): scope, ownership, numerical equivalence, and acceptance gates.
 - [Findings](findings.md): implementation changes, measured results, and unresolved questions.
+- [GUI comparison](gui-comparison.md): repeated three-runtime measurements with the actual views.
 
 ## Run
 

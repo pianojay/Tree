@@ -32,6 +32,7 @@ class Session {
   private trainRng=new Random(0);private queryRng=new Random(7);private zShow:number[][]=[];
   private tail:Promise<unknown>=Promise.resolve();private timer:ReturnType<typeof setTimeout>|undefined;
   private snapshotAt=0;private snapshotCost=0;private failure:string|undefined;
+  private snapshotCount=0;private snapshotTotal=0;
   constructor(public kind:Family,private baseline:Baseline){this.cfg={...defaults[kind]};}
   serialize<T>(fn:()=>Promise<T>):Promise<T>{const job=this.tail.then(fn);this.tail=job.catch(()=>{});return job;}
   async init(){await this.reset(this.dataset);}
@@ -40,6 +41,7 @@ class Session {
     this.stop();this.model?.dispose();this.data?.dispose();
     if(!this.baseline.datasets[dataset])throw new Error('Unknown dataset');
     this.cfg={...this.cfg,...cfg};this.dataset=dataset;this.generation++;this.step=0;this.history=[];this.failure=undefined;
+    this.snapshotCount=0;this.snapshotTotal=0;
     this.trainRng=new Random(0);this.queryRng=new Random(7);
     const a=this.baseline.datasets[dataset],values=unpack(a);this.data=tensors.tensor2d(values,[2000,2]);
     this.dataShow=Array.from({length:500},(_,i)=>[values[2*i],values[2*i+1]]);
@@ -71,7 +73,7 @@ class Session {
     if(this.kind==='ar'||this.kind==='flow'){
       const a=this.baseline.heldout?.[this.dataset];if(a){const v=tensors.tidy(()=>math.loss(this.kind,this.model.p,tensors.tensor2d(unpack(a),[512,2]),{},this.cfg));heldout=(await v.data())[0];v.dispose();}
     }
-    this.snapshot={kind:this.kind,dataset:this.dataset,generation:this.generation,step:this.step,history:this.history.slice(-3000),window:WINDOW,cfg:{...this.cfg},data:this.dataShow,heldout_nll:heldout,...extra};this.snapshotAt=performance.now();this.snapshotCost=this.snapshotAt-t;}
+    this.snapshot={kind:this.kind,dataset:this.dataset,generation:this.generation,step:this.step,history:this.history.slice(-3000),window:WINDOW,cfg:{...this.cfg},data:this.dataShow,heldout_nll:heldout,...extra};this.snapshotAt=performance.now();this.snapshotCost=this.snapshotAt-t;this.snapshotCount++;this.snapshotTotal+=this.snapshotCost;}
   private async sample(n:number):Promise<number[][]>{
     const m=this.model,p=m.p,r=this.queryRng;
     if(this.kind==='ar'){
@@ -105,6 +107,7 @@ class Session {
     return {...out,z:this.zShow,axis:AXIS};
   }
   async query(what:string,u:URL):Promise<any>{
+    if(what==='metrics')return {snapshot_count:this.snapshotCount,snapshot_total_ms:this.snapshotTotal,snapshot_last_ms:this.snapshotCost,snapshot_interval_ms:500};
     const q=(k:string)=>Number(u.searchParams.get(k)),p=this.model.p,x1=q('x1'),x2=q('x2'),z1=q('z1'),z2=q('z2');
     if(what==='sample_one'){const [x]=await this.sample(1);return {x1:x[0],x2:x[1]};}
     if(this.kind==='ar'){

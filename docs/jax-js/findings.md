@@ -26,6 +26,8 @@ The [final built-application check](results/browser-final.json) also passes afte
 
 ## Performance observations
 
+The subsequent [three-runtime GUI comparison](gui-comparison.md) provides counterbalanced repeated measurements for all four families and supersedes the exploratory runs below for that application-level comparison. It finds a 1.75–2.31× jax-js training advantage over TF.js with drawing active, alongside slower small queries and a remaining throughput gap to PyTorch.
+
 The initial translation compiled training but executed snapshots/queries eagerly. Its short AR drawing check reached about 38 updates/s and 61 FPS. Compiling inference and dataset gathering raised the next short check to about 72 updates/s at 61 FPS. The TF.js control run in this worktree reached about 37 updates/s at 61 FPS. AR query median fell from about 16 ms to about 3 ms; first-query compilation still creates an observable cold cost.
 
 These exploratory runs are saved in [browser-initial.json](results/browser-initial.json). They were collected during development, with other verification work occurring nearby, and are not a controlled final performance ranking. They show why training-only timing cannot predict the full application. Main's earlier 103 updates/s TF.js result and this branch's 37 updates/s result also demonstrate substantial run-to-run/environment sensitivity.

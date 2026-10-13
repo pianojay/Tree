@@ -1,0 +1,285 @@
+{
+  "date": "2026-10-13",
+  "protocol": "Three counterbalanced runtime rounds; 2s warm-up and 6s measurement per family; actual Canvas views, 500ms polling/snapshot target; paused query timings.",
+  "rows": [
+    {
+      "engine": "server",
+      "kind": "ar",
+      "updatesPerSec": 212.61106239327796,
+      "updatesRange": [
+        200.06586530545036,
+        212.61106239327796,
+        235.60339268955127
+      ],
+      "rafFps": 54.53317297395259,
+      "frameP95Ms": 18.299999999999272,
+      "snapshotMeanMs": 10.30133845947253,
+      "viewRenderMedianMs": 41.80000001192093,
+      "canvasMedianMs": 0.20000001788139343,
+      "queryMedianMs": 9.200000002980232,
+      "coldQueryMedianMs": 11.600000023841858,
+      "snapshotJsonBytes": 39372,
+      "renderedViews": [
+        11,
+        12,
+        12
+      ]
+    },
+    {
+      "engine": "server",
+      "kind": "vae",
+      "updatesPerSec": 196.6779604991323,
+      "updatesRange": [
+        177.1933891963462,
+        196.6779604991323,
+        199.87725380205117
+      ],
+      "rafFps": 56.36659904891759,
+      "frameP95Ms": 18.299999999999272,
+      "snapshotMeanMs": 8.739907688532885,
+      "viewRenderMedianMs": 6.9000000059604645,
+      "canvasMedianMs": 1,
+      "queryMedianMs": 9.399999991059303,
+      "coldQueryMedianMs": 12,
+      "inspectionMedianMs": 28.600000023841858,
+      "snapshotJsonBytes": 61019,
+      "renderedViews": [
+        11,
+        11,
+        12
+      ]
+    },
+    {
+      "engine": "server",
+      "kind": "flow",
+      "updatesPerSec": 107.29082415838123,
+      "updatesRange": [
+        102.43193232863781,
+        107.29082415838123,
+        111.47175502464327
+      ],
+      "rafFps": 55.99322399403796,
+      "frameP95Ms": 18.200000000000728,
+      "snapshotMeanMs": 20.805299999968458,
+      "viewRenderMedianMs": 18.899999991059303,
+      "canvasMedianMs": 3.4000000059604645,
+      "queryMedianMs": 11.300000011920929,
+      "coldQueryMedianMs": 8.900000005960464,
+      "snapshotJsonBytes": 130714,
+      "renderedViews": [
+        11,
+        11,
+        12
+      ]
+    },
+    {
+      "engine": "server",
+      "kind": "gan",
+      "updatesPerSec": 128.25817128671906,
+      "updatesRange": [
+        117.99263989989711,
+        128.25817128671906,
+        139.27807530978265
+      ],
+      "rafFps": 56.37632857450794,
+      "frameP95Ms": 18.200000000004366,
+      "snapshotMeanMs": 9.540253842715174,
+      "viewRenderMedianMs": 12,
+      "canvasMedianMs": 0.9000000059604645,
+      "queryMedianMs": 6.75,
+      "coldQueryMedianMs": 8.799999982118607,
+      "snapshotJsonBytes": 76418,
+      "renderedViews": [
+        11,
+        11,
+        11
+      ]
+    },
+    {
+      "engine": "tfjs",
+      "kind": "ar",
+      "updatesPerSec": 36.48855212771281,
+      "updatesRange": [
+        34.518467380115965,
+        36.48855212771281,
+        37.38441433852224
+      ],
+      "rafFps": 56.14244900671051,
+      "frameP95Ms": 18.200000000000728,
+      "snapshotMeanMs": 54.418181817639955,
+      "viewRenderMedianMs": 16.200000017881393,
+      "canvasMedianMs": 0.29999998211860657,
+      "queryMedianMs": 1,
+      "coldQueryMedianMs": 1,
+      "snapshotJsonBytes": 139502,
+      "renderedViews": [
+        10,
+        10,
+        9
+      ]
+    },
+    {
+      "engine": "tfjs",
+      "kind": "vae",
+      "updatesPerSec": 31.00366107070721,
+      "updatesRange": [
+        30.532831090477735,
+        31.00366107070721,
+        32.71699796770932
+      ],
+      "rafFps": 56.25972134890956,
+      "frameP95Ms": 18.200000000000728,
+      "snapshotMeanMs": 19.12727272781459,
+      "viewRenderMedianMs": 8.599999994039536,
+      "canvasMedianMs": 1.2999999821186066,
+      "queryMedianMs": 1.4000000059604645,
+      "coldQueryMedianMs": 2.300000011920929,
+      "inspectionMedianMs": 51.599999994039536,
+      "snapshotJsonBytes": 149570,
+      "renderedViews": [
+        11,
+        10,
+        10
+      ]
+    },
+    {
+      "engine": "tfjs",
+      "kind": "flow",
+      "updatesPerSec": 17.895199206086538,
+      "updatesRange": [
+        17.298544039177003,
+        17.895199206086538,
+        19.229556774550545
+      ],
+      "rafFps": 56.22738681182569,
+      "frameP95Ms": 18.200000000000728,
+      "snapshotMeanMs": 171.69999999801317,
+      "viewRenderMedianMs": 21.650000020861626,
+      "canvasMedianMs": 3.5499999970197678,
+      "queryMedianMs": 2.300000011920929,
+      "coldQueryMedianMs": 3.5,
+      "snapshotJsonBytes": 420076,
+      "renderedViews": [
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "engine": "tfjs",
+      "kind": "gan",
+      "updatesPerSec": 23.83159009674437,
+      "updatesRange": [
+        23.416500387434525,
+        23.83159009674437,
+        24.132231404958677
+      ],
+      "rafFps": 56.22808758351522,
+      "frameP95Ms": 18.200000000000728,
+      "snapshotMeanMs": 16.345454543828964,
+      "viewRenderMedianMs": 11.400000005960464,
+      "canvasMedianMs": 0.75,
+      "queryMedianMs": 0.5,
+      "coldQueryMedianMs": 0.7999999821186066,
+      "snapshotJsonBytes": 205255,
+      "renderedViews": [
+        10,
+        10,
+        10
+      ]
+    },
+    {
+      "engine": "jax-js",
+      "kind": "ar",
+      "updatesPerSec": 64.46387543621167,
+      "updatesRange": [
+        62.34948701883212,
+        64.46387543621167,
+        64.70462010814205
+      ],
+      "rafFps": 56.12211111846899,
+      "frameP95Ms": 18.299999999999272,
+      "snapshotMeanMs": 54.4636363576759,
+      "viewRenderMedianMs": 29.599999994039536,
+      "canvasMedianMs": 0.30000001192092896,
+      "queryMedianMs": 3.6000000089406967,
+      "coldQueryMedianMs": 2.9000000059604645,
+      "snapshotJsonBytes": 140441,
+      "renderedViews": [
+        10,
+        10,
+        9
+      ]
+    },
+    {
+      "engine": "jax-js",
+      "kind": "vae",
+      "updatesPerSec": 54.8872674687199,
+      "updatesRange": [
+        54.879661465274914,
+        54.8872674687199,
+        57.1865545100341
+      ],
+      "rafFps": 56.21351125938282,
+      "frameP95Ms": 18.299999999999272,
+      "snapshotMeanMs": 26.381818186153065,
+      "viewRenderMedianMs": 8.700000002980232,
+      "canvasMedianMs": 1.199999988079071,
+      "queryMedianMs": 2.4500000029802322,
+      "coldQueryMedianMs": 51.5,
+      "inspectionMedianMs": 40.69999998807907,
+      "snapshotJsonBytes": 151842,
+      "renderedViews": [
+        10,
+        10,
+        10
+      ]
+    },
+    {
+      "engine": "jax-js",
+      "kind": "flow",
+      "updatesPerSec": 31.39006197104118,
+      "updatesRange": [
+        30.774267474218366,
+        31.39006197104118,
+        32.160672092381255
+      ],
+      "rafFps": 56.03207466561503,
+      "frameP95Ms": 18.299999999999272,
+      "snapshotMeanMs": 127.20000000298023,
+      "viewRenderMedianMs": 23.69999998807907,
+      "canvasMedianMs": 4.199999988079071,
+      "queryMedianMs": 2.9000000059604645,
+      "coldQueryMedianMs": 84.5,
+      "snapshotJsonBytes": 415126,
+      "renderedViews": [
+        9,
+        9,
+        8
+      ]
+    },
+    {
+      "engine": "jax-js",
+      "kind": "gan",
+      "updatesPerSec": 54.968707573261185,
+      "updatesRange": [
+        52.20379303519169,
+        54.968707573261185,
+        55.17875617876311
+      ],
+      "rafFps": 56.14058399495068,
+      "frameP95Ms": 18.299999999999272,
+      "snapshotMeanMs": 31.700000000496704,
+      "viewRenderMedianMs": 11.449999988079071,
+      "canvasMedianMs": 0.8499999940395355,
+      "queryMedianMs": 1.1500000059604645,
+      "coldQueryMedianMs": 23,
+      "snapshotJsonBytes": 209813,
+      "renderedViews": [
+        10,
+        10,
+        10
+      ]
+    }
+  ]
+}

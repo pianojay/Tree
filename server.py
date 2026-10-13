@@ -5,6 +5,7 @@ Then open http://localhost:8000 (serves the built page from web/dist).
 """
 import threading
 import time
+import os
 from pathlib import Path
 
 import numpy as np
@@ -23,7 +24,7 @@ torch.set_num_threads(2)
 
 N_TRAIN = 2000        # training set: a finite subset of p_data
 N_SHOW = 500          # points sent to the page
-SNAP_SECONDS = 0.35   # snapshot at most this often while training
+SNAP_SECONDS = float(os.environ.get('TREE_SNAPSHOT_SECONDS', '0.35'))
 MAX_STEPS = 20000
 
 AXIS = torch.linspace(WINDOW[0], WINDOW[1], 64)
@@ -77,6 +78,8 @@ class Session:
             self.heldout = torch.tensor(sample(dataset, 512, seed=1))
             self.step = 0
             self.history = []
+            self.snapshot_count = 0
+            self.snapshot_total_ms = 0.0
             self.build()
             self.snapshot = self._snapshot()
 
@@ -122,6 +125,7 @@ class Session:
         return self.data[torch.randint(0, len(self.data), (n,))]
 
     def _snapshot(self):
+        started = time.perf_counter()
         self.model.eval()
         snap = {"kind": self.kind, "dataset": self.dataset, "step": self.step,
                 "generation": self.generation,
@@ -132,6 +136,9 @@ class Session:
             if self.kind in ("ar", "flow"):
                 snap["heldout_nll"] = self.model.loss(self.heldout).item()
         self.model.train()
+        self.snapshot_last_ms = (time.perf_counter() - started) * 1000
+        self.snapshot_count += 1
+        self.snapshot_total_ms += self.snapshot_last_ms
         return snap
 
     # --- per family ------------------------------------------------------------
@@ -311,6 +318,14 @@ def runtime():
     return {'backend': 'pytorch-cpu', 'version': torch.__version__,
             'threads': torch.get_num_threads(), 'tensors': len(tensors),
             'bytes': sum(t.numel() * t.element_size() for t in tensors)}
+
+
+@app.get("/api/{kind}/metrics")
+def metrics(kind: str):
+    s = sessions[kind]
+    with s.lock:
+        return {'snapshot_count': s.snapshot_count, 'snapshot_total_ms': s.snapshot_total_ms,
+                'snapshot_last_ms': s.snapshot_last_ms, 'snapshot_interval_ms': SNAP_SECONDS * 1000}
 
 
 @app.get("/api/{kind}/state")
