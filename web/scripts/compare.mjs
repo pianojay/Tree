@@ -1,0 +1,10 @@
+import './ts-loader.mjs';
+import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+const {compare}=await import('../src/compare/run.ts');
+const fixtures=JSON.parse(readFileSync(new URL('../public/runtime-fixtures.json',import.meta.url),'utf8'));
+const lib=process.argv[2]??'tfjs',backend=process.argv[3]??(lib==='tfjs'?'cpu':'wasm');
+const result=await compare(fixtures,lib,backend);
+mkdirSync(new URL('../../runs/comparison/',import.meta.url),{recursive:true});
+writeFileSync(new URL(`../../runs/comparison/${lib}-${backend}.json`,import.meta.url),JSON.stringify(result,null,2));
+console.log(JSON.stringify(result,null,2));
+if(result.results.some(x=>!x.pass))process.exitCode=1;

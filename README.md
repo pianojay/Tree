@@ -2,31 +2,60 @@
 
 A miniature for making the abstract mathematics of generative models explicit and visible. See [whitepaper.md](whitepaper.md).
 
+The rebuild through Phases 1–5 runs four model families in a TensorFlow.js WASM worker, with Canvas views and optional PyTorch server mode. See the [roadmap](docs/roadmap.md), [implementation contract](docs/implementation-contract.md), and [runtime comparison](docs/runtime-comparison.md). The historical TF.js and jax-js branches remain reference material.
+
+## Reference VAE lab
+
+The separate [VAE interactive lab](references/vae_2d_lab.html) is by **Professor Minhyuk Sung, KAIST**, [mhsung@kaist.ac.kr](mailto:mhsung@kaist.ac.kr), created with Claude. See its [attribution and provenance](references/README.md). Tree was independently devised by its owner.
+
 ## Requirements
 
-- Python 3.12+ (tested with 3.14) and Node.js 20+ (tested with 24); CPU only, no GPU needed.
-- First setup takes about 4 minutes, mostly downloading PyTorch.
+- Node.js 24 is tested and supports the verification scripts. No dedicated GPU is needed.
+- Python 3.12+ (tested with 3.14) is optional: use it for the PyTorch server or regenerating reference assets.
 
 ## Setup
 
 ```bash
 gh repo clone pianojay/Tree && cd Tree      # or: git clone https://github.com/pianojay/Tree.git
-python -m venv .venv
-.venv/Scripts/python -m pip install -r requirements.txt     # macOS/Linux: .venv/bin/python
-cd web && npm install && npm run build && cd ..
+cd web
+npm install
+npm run build
+npm run preview
 ```
 
-## Demo (autoregressive, VAE, normalizing flow, GAN)
+Open http://127.0.0.1:4173. Training happens in a worker; WASM and reference data are served locally from the build. Python and a CDN are not required. For development, run `npm run dev` in `web/` and open http://127.0.0.1:5173.
+
+The built `web/dist` directory can also be served by an ordinary static server. WASM uses one CPU thread and does not require cross-origin isolation headers.
+
+## Optional PyTorch server
 
 ```bash
+python -m venv .venv
+.venv/Scripts/python -m pip install -r requirements.txt     # macOS/Linux: .venv/bin/python
 .venv/Scripts/python -m uvicorn server:app --port 8000      # macOS/Linux: .venv/bin/python
 ```
 
-Open http://localhost:8000. Python trains the models on the CPU in the background; the page polls snapshots and queries the models on hover and drag. Restart the server after pulling changes. For page development with hot reload, run `npm run dev` in `web/` alongside the server and open http://localhost:5173.
+Open http://127.0.0.1:8000/?engine=server. Python trains in background threads; the same views query it over HTTP. Restart the server after changes. With the development server, use http://127.0.0.1:5173/?engine=server.
 
 Toy datasets (`tree/data.py`): simple, multimodal, tree, x_shape, sine, two_moons, ring8, rings, spiral, checkerboard, crescent.
 
 ## Tests
+
+```bash
+cd web && npm test
+```
+
+`npm test` checks normalization, flow inverses and Jacobians, VAE KL and evidence against analytic examples, GAN update isolation, and tensor ownership. Open `/verify.html` on the built application for worker training, lifecycle, query, memory, held-out NLL, and drawing checks; add `?engine=server` when serving it through PyTorch.
+
+Regenerate the common data and matched fixtures from the root:
+
+```bash
+.venv/Scripts/python -m tests.export_runtime_reference
+```
+
+Open `/compare.html?lib=tfjs&backend=wasm` or `/compare.html?lib=jax-js&backend=wasm` on the development server to compare current runtimes using the same model equations. The commands `npm run compare:tfjs` and `npm run compare:jax` run CPU and WASM comparisons in Node. See the [jax-js bug memo](docs/jax-js-bugs.md) for the fixed historical WebGL bug and reproduction routes.
+
+The original pure-Python checks are retained:
 
 ```bash
 .venv/Scripts/python -m tests.test_engine   # gradient check of the pure-Python reference engine
@@ -35,4 +64,4 @@ Toy datasets (`tree/data.py`): simple, multimodal, tree, x_shape, sine, two_moon
 
 ## License
 
-MIT
+Tree code: MIT. The separate VAE reference lab has its authorship recorded in [references/README.md](references/README.md).

@@ -3,6 +3,8 @@ import { get, post } from "./api";
 export type BaseState = {
   kind: string; step: number; running: boolean; dataset: string; history: number[][];
   window: [number, number]; data: number[][]; cfg: Record<string, any>;
+  generation?: number; error?: string;
+  heldout_nll?: number;
 };
 
 export type PlaneSpec = { key: string; title: string; sub?: string };
@@ -15,7 +17,7 @@ export function planeRow(row: HTMLElement, planes: PlaneSpec[], arrows: string[]
   // each arrow travels with the plane it leads into, so a wrapped row starts with its arrow
   row.innerHTML = planes.map((p, i) => `
     <div class="plane-unit">
-      ${i > 0 ? `<div class="arrow">${arrows[i - 1]}</div>` : ""}
+      ${i > 0 && arrows[i - 1] ? `<div class="arrow">${arrows[i - 1]}</div>` : ""}
       <div class="card plane-card">
         <h2>${p.title}</h2><p class="sub">${p.sub ?? ""}</p>
         <div data-plane="${p.key}"></div>
@@ -31,6 +33,9 @@ export abstract class View<S extends BaseState> {
   el: Record<string, HTMLElement> = {};
   state?: S;
   timer?: number;
+  private polling = false;
+  private request = 0;
+  private active = false;
   abstract kind: string;
 
   constructor(protected root: HTMLElement, template: string) {
@@ -48,9 +53,9 @@ export abstract class View<S extends BaseState> {
   abstract statusText(s: S): string;
 
   wireCommon() {
-    this.el.run.onclick = () => this.control(this.state?.running ? "pause" : "start");
-    this.el.reset.onclick = () => this.reset();
-    this.el.dataset.onchange = () => this.reset();
+    this.el.run.onclick = () => {void this.control(this.state?.running ? "pause" : "start").catch(e=>this.showError(e));};
+    this.el.reset.onclick = () => {void this.reset().catch(e=>this.showError(e));};
+    this.el.dataset.onchange = () => {void this.reset().catch(e=>this.showError(e));};
   }
 
   async control(action: string, config?: Record<string, any>) {
@@ -68,28 +73,42 @@ export abstract class View<S extends BaseState> {
   onReset() {}
 
   async activate() {
+    this.active = true;
+    this.el.stat.textContent='Loading model…';
     const sel = this.el.dataset as HTMLSelectElement;
     if (!sel.options.length) {
       const names = await get<string[]>("/api/datasets");
+      if(!this.active)return;
       sel.innerHTML = names.map((n) => `<option>${n}</option>`).join("");
     }
     await this.poll(true);
-    this.timer = window.setInterval(() => { if (!document.hidden) this.poll(); }, 400);
+    if(!this.active)return;
+    this.timer = window.setInterval(() => { if (!document.hidden) void this.poll().catch(e=>this.showError(e)); }, 500);
   }
 
-  deactivate() { window.clearInterval(this.timer); }
+  deactivate() { this.active=false;this.request++;window.clearInterval(this.timer);void post(`/api/${this.kind}/control`,{action:'pause'}).catch(e=>this.showError(e)); }
+  showError(e:unknown){window.clearInterval(this.timer);this.el.stat.textContent=`Unable to run this model: ${String(e)}`;this.el.stat.setAttribute('role','alert');}
 
   async poll(force = false) {
+    if(!this.active)return;
+    if(this.polling&&!force)return;
+    const request=++this.request;
+    this.polling=true;
+    try {
     const s = await get<S>(`/api/${this.kind}/state`);
+    if(request!==this.request||!this.active)return;
+    if(s.error)throw new Error(s.error);
     if (!s.cfg) {   // the page was rebuilt but the server still runs older code
       this.el.stat.textContent = "⚠ The server is running older code than this page. Restart it (uvicorn server:app).";
       return;
     }
-    const changed = force || !this.state || s.step !== this.state.step || s.dataset !== this.state.dataset;
+    const changed = force || !this.state || s.generation !== this.state.generation || s.step !== this.state.step || s.dataset !== this.state.dataset;
     this.state = s;
+    this.el.stat.removeAttribute('role');
     (this.el.dataset as HTMLSelectElement).value = s.dataset;
     this.el.run.textContent = s.running ? "Pause" : "Train";
-    this.el.stat.textContent = this.statusText(s);
-    if (changed) this.render();
+    this.el.stat.textContent = this.statusText(s)+(s.heldout_nll!==undefined?` · held-out NLL ${s.heldout_nll.toFixed(3)}`:'');
+    if (changed) await this.render();
+    }catch(e){this.showError(e);throw e;}finally{this.polling=false;}
   }
 }

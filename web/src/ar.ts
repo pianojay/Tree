@@ -1,4 +1,4 @@
-import Plotly from "plotly.js-dist-min";
+import Plotly from "./draw";
 import { get, latest } from "./api";
 import { INK, SERIES, SEQ } from "./colors";
 import { CONFIG, planeLayout, stripLayout, toData } from "./plot";
@@ -78,7 +78,7 @@ export class ARView extends View<State> {
   }
 
   resetConfig() { return { k: Number((this.el.k as HTMLSelectElement).value) }; }
-  onReset() { this.drops = []; }
+  onReset() { this.drops = [];this.anim=null; }
 
   statusText(s: State) {
     (this.el.k as HTMLSelectElement).value = String(s.cfg.k);

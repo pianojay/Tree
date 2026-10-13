@@ -3,6 +3,10 @@
 **Status:** Draft v0.3 · 2026-10-07 (after Reviews 1–2)
 **Origin:** Brainstorm of 2026-10-07 ([record](docs/brainstorm-log.md), [raw export](ChatGPT-Circle%20Representation%20Priors-20261007-2051.md)) · **Decisions:** [docs/decisions.md](docs/decisions.md)
 
+**Development restart (2026-10-13):** the owner requested a fresh implementation effort on `main`. The [development roadmap](docs/roadmap.md) governs that work; the TF.js and jax-js branches are referential. Professor Minhyuk Sung's separate VAE lab is [credited here](references/README.md).
+
+**Current implementation:** Phases 1–5 use the setup of `main`, a TensorFlow.js WASM worker and Canvas views, with the original PyTorch server supported. AR, VAE, flow and existing GAN mechanics are implemented; the other three families remain pending. [Comparison and verification](docs/runtime-comparison.md).
+
 > Make $p_{\text{data}}$ simple enough to see, but complicated enough that learning it is nontrivial.
 
 > Everything is explicit, and a miniature is what allows it. If a failure occurs, it must be sensibly and intuitively traceable.
@@ -90,7 +94,7 @@ The guiding idea from the brainstorm: **every family on the same canvas**. For n
 
 ## 7. Implementation
 
-- **Minimal Python, CPU only.** Small and readable, in the spirit of Karpathy's llm.c ("this is not even an LLM"). Libraries are used wherever they serve better: dependency minimalism is not the first concern (Review 4). The pure-Python autodiff engine in `tree/` stays as a reference.
+- **Small implementations of the principles.** The fresh implementation follows `main`'s model setup and uses a TensorFlow.js WASM worker with Canvas views. The Python server remains supported; jax-js remains a comparison option. Browser use does not require Python. The pure-Python autodiff engine in `tree/` stays as a reference.
 - **Implementing before training.** The first job is implementing each principle and checking that its mechanics work on the simple ground truth. Training the models *well* is a separate, later problem.
 - **License:** MIT ([LICENSE](LICENSE)).
 
@@ -110,6 +114,8 @@ The guiding idea from the brainstorm: **every family on the same canvas**. For n
 
 This is iterative, not a sequence of fixed milestones.
 
+The [development roadmap](docs/roadmap.md) turns the research direction below into a fresh implementation sequence. It includes runtime selection, numerical verification, interactive model slices, and distribution of the application.
+
 1. **Simple ground truths** (simple, then multimodal), plus the crudest views needed to debug.
 2. **Minimal implementations** of the seven principles, each checked to *work* on the simple case.
 3. **Curate challenging ground truths.** Iterate $p_{\text{data}}$ until the families' behavior is non-trivial and worth tracing, and keep every version.
@@ -120,7 +126,7 @@ This is iterative, not a sequence of fixed milestones.
 
 | # | Question | Notes |
 |---|---|---|
-| Q1 | $\mathbb R^d$ or $[0,1]^d$? Which distribution plays the role of the Gaussian? | [Analysis](docs/sample-space-and-priors.md). Leaning $\mathbb R^d$ with a squashing display. |
+| ~~Q1~~ | ~~$\mathbb R^d$ or $[0,1]^d$? Which distribution plays the role of the Gaussian?~~ | Phase 1 follows main: $\mathbb R^2$, Gaussian reference distributions, and the existing squashing display. Other choices may be iterated later. |
 | Q2 | The display map: hue-arc span, and the squashing function if $\mathbb R^d$ | One option: use the CDF of the reference distribution, so pure noise renders as uniformly random hue |
 | Q3 | AR conditional density family (continuous, multimodal) | Follows from Q1: a Gaussian mixture on $\mathbb R$, or a Beta / logit-normal mixture on $[0,1]$ |
 | ~~Q4~~ | ~~Which flow model first?~~ | Resolved in Review 3: normalizing flow and flow matching are separate families, and which variant to use is not an immediate concern |
@@ -132,6 +138,8 @@ This is iterative, not a sequence of fixed milestones.
 | Document | Purpose |
 |---|---|
 | [docs/decisions.md](docs/decisions.md) | Decision log, review log, and withdrawn draft proposals |
+| [docs/roadmap.md](docs/roadmap.md) | Current development sequence for the fresh implementation on main |
+| [references/README.md](references/README.md) | Credit for Professor Minhyuk Sung's VAE lab and historical experiment references |
 | [docs/ground-truth.md](docs/ground-truth.md) | What the ground truth is for and how it is kept: curated, versioned, a ladder |
 | [docs/sample-space-and-priors.md](docs/sample-space-and-priors.md) | Analysis: $\mathbb R^d$ vs. $[0,1]^d$, and candidate priors |
 | [docs/model-families.md](docs/model-families.md) | The seven crux maps, and how each family's concepts become live objects |

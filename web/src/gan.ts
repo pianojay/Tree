@@ -1,4 +1,4 @@
-import Plotly from "plotly.js-dist-min";
+import Plotly from "./draw";
 import { get, latest } from "./api";
 import { DIV, INK, SERIES, treeMarker } from "./colors";
 import { CONFIG, ellipses, planeLayout, stripLayout, toData } from "./plot";

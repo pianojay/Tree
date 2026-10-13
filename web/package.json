@@ -4,14 +4,22 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/copy-wasm.mjs",
     "dev": "vite",
-    "build": "tsc --noEmit && vite build"
+    "prebuild": "node scripts/copy-wasm.mjs",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node scripts/test-runtime.mjs",
+    "compare:tfjs": "node scripts/compare.mjs tfjs cpu",
+    "compare:jax": "node scripts/compare.mjs jax-js wasm"
   },
   "dependencies": {
-    "plotly.js-dist-min": "^4.1.2"
+    "@tensorflow/tfjs-backend-cpu": "4.22.0",
+    "@tensorflow/tfjs-backend-wasm": "4.22.0",
+    "@tensorflow/tfjs-core": "4.22.0"
   },
   "devDependencies": {
-    "@types/plotly.js-dist-min": "^2.3.4",
+    "@jax-js/jax": "0.1.26",
     "typescript": "^7.0.2",
     "vite": "^8.3.4"
   }

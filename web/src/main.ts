@@ -19,7 +19,7 @@ function show(key: Key) {
   current = key;
   document.querySelectorAll(".view").forEach((v) => v.classList.toggle("active", v.id === `view-${key}`));
   document.querySelectorAll<HTMLElement>(".tab").forEach((t) => t.classList.toggle("active", t.dataset.view === key));
-  views[key].activate();
+  void views[key].activate().catch(e=>views[key].showError(e));
   if (location.hash !== `#${key}`) history.replaceState(null, "", `#${key}`);
 }
 

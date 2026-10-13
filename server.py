@@ -72,7 +72,9 @@ class Session:
                 self.cfg.update(cfg)
             torch.manual_seed(0)
             self.dataset = dataset
+            self.generation = getattr(self, "generation", 0) + 1
             self.data = torch.tensor(sample(dataset, N_TRAIN, seed=0))
+            self.heldout = torch.tensor(sample(dataset, 512, seed=1))
             self.step = 0
             self.history = []
             self.build()
@@ -122,10 +124,13 @@ class Session:
     def _snapshot(self):
         self.model.eval()
         snap = {"kind": self.kind, "dataset": self.dataset, "step": self.step,
+                "generation": self.generation,
                 "history": self.history[-3000:], "window": WINDOW, "cfg": dict(self.cfg),
                 "data": r(self.data[:N_SHOW])}
         with torch.no_grad():
             snap.update(self.extra())
+            if self.kind in ("ar", "flow"):
+                snap["heldout_nll"] = self.model.loss(self.heldout).item()
         self.model.train()
         return snap
 
@@ -288,6 +293,26 @@ def datasets():
     return list(DATASETS)
 
 
+@app.get("/api/_runtime")
+def runtime():
+    """Persistent model, data and optimizer tensor ownership for verification."""
+    tensors = []
+    for s in sessions.values():
+        with s.lock:
+            tensors.extend(s.model.parameters())
+            tensors.extend([s.data, s.heldout])
+            if hasattr(s, 'z_show'):
+                tensors.append(s.z_show)
+            for name in ('opt', 'opt_d', 'opt_g'):
+                opt = getattr(s, name, None)
+                if opt:
+                    for state in opt.state.values():
+                        tensors.extend(v for v in state.values() if torch.is_tensor(v))
+    return {'backend': 'pytorch-cpu', 'version': torch.__version__,
+            'threads': torch.get_num_threads(), 'tensors': len(tensors),
+            'bytes': sum(t.numel() * t.element_size() for t in tensors)}
+
+
 @app.get("/api/{kind}/state")
 def state(kind: str):
     s = sessions[kind]
@@ -363,6 +388,40 @@ def vae_decode(z1: float, z2: float):
         m = s.model.decode(torch.tensor([[z1, z2]]))
         sx = s.model.sigma_x()
     return {"mean": r(m[0]), "sigma": r(sx)}
+
+
+@app.get("/api/vae/inspect")
+def vae_inspect(x1: float, x2: float, resolution: int = 64):
+    """Finite-domain quadrature and a deterministic Monte Carlo ELBO estimate."""
+    import math
+    n = max(24, min(120, resolution))
+    span, samples = 4.0, 2048
+    delta = 2 * span / n
+    zaxis = -span + (torch.arange(n) + 0.5) * delta
+    s = sessions['vae']
+    with s.lock, torch.no_grad():
+        m = s.model
+        x = torch.tensor([[x1, x2]])
+        z = grid_points(zaxis)
+        sigma = m.sigma_x()
+        normal_logp = lambda residual, std: -(0.5 * (residual / std) ** 2 + std.log() + 0.5 * math.log(2 * math.pi)).sum(-1)
+        ll = normal_logp(x - m.decode(z), sigma)
+        joint = ll - 0.5 * (z ** 2).sum(-1) - math.log(2 * math.pi)
+        logp = torch.logsumexp(joint, 0) + 2 * math.log(delta)
+        mu, lv = m.encode(x)
+        zs = mu + (0.5 * lv).exp() * torch.randn(samples, 2, generator=torch.Generator().manual_seed(91))
+        draws = normal_logp(x - m.decode(zs), sigma)
+        kl = 0.5 * (mu ** 2 + lv.exp() - 1 - lv).sum()
+        elbo = draws.mean() - kl
+        se = draws.std() / math.sqrt(samples)
+        q = normal_logp(z - mu, (0.5 * lv).exp()).exp()
+        return {'step': s.step, 'x': [x1, x2], 'axis': r(zaxis, 6),
+                'likelihood': r((ll - ll.max()).exp().reshape(n, n), 7),
+                'posterior': r((joint - logp).exp().reshape(n, n), 7),
+                'q': r(q.reshape(n, n), 7), 'logp': float(logp), 'elbo': float(elbo),
+                'mu': r(mu[0], 7), 'sigma': r((0.5 * lv[0]).exp(), 7),
+                'gap': float(logp - elbo), 'mc_se': float(se), 'samples': samples,
+                'domain': [-span, span], 'resolution': n}
 
 
 # --- flow and GAN queries ----------------------------------------------------

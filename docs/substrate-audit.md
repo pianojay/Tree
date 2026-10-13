@@ -3,6 +3,8 @@
 **Status:** Audit (2026-10-09). Decided in Review 6 (D16): keep the current substrate; tininess is an optional later effort.
 **Parent:** [whitepaper.md](../whitepaper.md) · **Asked in:** owner's request after Review 5
 
+**Historical record:** these measurements and Review 6 describe the original pilot. The 2026-10-13 [development roadmap](roadmap.md) reopens runtime selection for the fresh implementation; the earlier measurements remain reference evidence.
+
 The question: can Tree run with a much smaller install than PyTorch, and could it ship as one self-contained program, like a game downloaded from itch.io?
 
 ## 1. What we use now (measured on this machine)

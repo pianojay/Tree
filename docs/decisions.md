@@ -80,6 +80,7 @@ Each entry records **what** was decided, **why**, and **where it came from**.
 - **Source:** [User], Review 1
 - **Decision:** a very minimal Python implementation, in the spirit of Karpathy's llm.c. Implementing the principles and checking their mechanics comes before training them well.
 - **Substrate (Review 4):** use libraries where they serve better; dependency minimalism is not the first concern. The earlier pure-Python foundation stays as a reference: a scalar autodiff engine (`tree/engine.py`), networks plus Adam (`tree/nn.py`), and tests under `tests/`.
+- **Historical scope:** Python was chosen for the pilot. D17 reopens the substrate for the fresh implementation while preserving that pilot as a reference.
 
 ### D11. MIT license
 
@@ -109,6 +110,28 @@ Each entry records **what** was decided, **why**, and **where it came from**.
 - **Decision:** keep PyTorch + FastAPI + the Vite page as the working substrate. The heavy install is an accepted price: for someone studying ML, downloading big files is justified.
 - **Not the goal:** users don't need to understand or follow the implementation. The product is the interactive visualization of mathematical and information-theoretic concepts working on stage, not the code behind it.
 - **Later, maybe:** a tiny footprint or one-step install (browser-native training, a C/WASM core, Rust, or knok; see [substrate-audit.md](substrate-audit.md)) is a "fancy" follow-up, not planned. The llm.c analogy means only "something that works can be tiny".
+- **Historical scope:** this records Review 6's choice for the pilot. D17 reopens implementation choices for the fresh development effort; the pilot remains available during the rebuild.
+
+### D17. Fresh Tree development on main
+
+- **Source:** [User], 2026-10-13, after inspecting the runtime experiments and their implementation.
+- **Decision:** create a roadmap for Tree development from scratch under `main`. Treat `bench/tfjs-vs-jaxjs` and `tfjs-ui` as referential branches rather than the implementation foundation.
+- **Context:** the owner independently devised Tree and built a working Python demo, then explored browser libraries to reduce the runtime footprint. Those experiments halted; the new effort resumes through a clean development plan.
+- **Implementation choices:** runtime, renderer, packaging, and numerical tolerances will be evaluated afresh. The [roadmap](roadmap.md) proposes the sequence; creating it does not mean the rebuild or its runtime selection is complete.
+
+### D18. Credit the reference VAE lab to Professor Minhyuk Sung
+
+- **Source:** [User], 2026-10-13, supplying Professor Sung's September 15 announcement at 22:46 KST.
+- **Decision:** credit the single-file VAE interactive lab to Professor Minhyuk Sung, KAIST, [mhsung@kaist.ac.kr](mailto:mhsung@kaist.ac.kr), created with Claude.
+- **Record:** preserve a visibly credited copy and its [provenance](../references/README.md). The lab is separate from the independently devised Tree project.
+
+### D19. Implement through Phase 5 using the setup of main
+
+- **Source:** [User], 2026-10-13.
+- **Decision:** proceed through Phase 5. Phase 1 follows main's setup; compare PyTorch server, TF.js and jax-js in Phase 2. The owner favors TF.js. Memo reproducible jax-js bugs and report them upstream; preserve GAN's current description in Phase 5.
+- **Implementation:** adopt main's R² world, display mapping, datasets, model sizes and optimizers. Use TF.js WASM in a worker and Canvas for the current application; retain PyTorch server mode and a fresh jax-js comparison adapter.
+- **Evidence:** both current WASM adapters pass matched four-model checks. jax-js is faster here; TF.js is the owner's preferred working runtime. The historical jax-js WebGL bug already has a closed issue and merged fix, and current checks pass, so no duplicate issue was filed. See the [comparison](runtime-comparison.md) and [bug memo](jax-js-bugs.md).
+- **Scope:** Phases 1–5 implemented and verified. GAN's explanation is not claimed complete. Phases 6–7 remain pending.
 
 ## Open
 
@@ -220,3 +243,9 @@ These were spontaneous choices made while drafting v0.1 of the whitepaper. They 
 2. Making Tree tiny (file size or installation) is a possible later effort, probably over the top for now.
 3. Users need not follow the implementation; the point is interactive visualization of the concepts.
 4. The llm.c analogy meant "something working can be tiny", not "write everything by hand".
+
+### Development restart and reference attribution (2026-10-13)
+
+1. The owner requested credit for the HTML VAE lab to Professor Minhyuk Sung, supplying his announcement that he created it with Claude (D18).
+2. The owner requested a roadmap for Tree development from scratch under `main`, with both browser-library experiment branches treated only as references (D17).
+3. The owner subsequently authorized implementation through Phase 5 using main's setup and a fresh backbone comparison (D19). Its [verification record](runtime-comparison.md) distinguishes implemented scope from pending Phases 6–7.

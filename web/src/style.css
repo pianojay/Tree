@@ -46,6 +46,7 @@ main { padding: 16px 20px; }
 
 /* left column fits a 520px plane plus card padding; right column takes the rest */
 .grid { display: grid; grid-template-columns: 546px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
 .col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 
 .card {

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<!--
+VAE interactive lab by Professor Minhyuk Sung, KAIST (mhsung@kaist.ac.kr),
+created with Claude. Attribution supplied by the Tree owner from Professor
+Sung's September 15 message at 22:46 KST. See references/README.md for provenance.
+This reference lab is distinct from the independently developed Tree project.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAE on a 2D density — interactive lab</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.22.0/tf.min.js"></script>
+<style>
+  :root{
+    --paper:#EDF0F3; --panel:#FFFFFF; --ink:#1C2430; --ink2:#5A6675; --line:#CBD2DA;
+    --accent:#C2185B;        /* selected x*  */
+    --latent:#0E7C86;        /* selected z*  */
+    --model:#3A56A6;         /* model / density */
+    --ok:#2E7D32;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font:15px/1.45 "Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif}
+  header{padding:22px 28px 10px;max-width:1180px;margin:0 auto}
+  h1{margin:0;font-size:24px;font-weight:600;letter-spacing:-.01em}
+  h1 span{color:var(--ink2);font-weight:400}
+  header p{margin:6px 0 0;color:var(--ink2);max-width:72ch}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px 40px}
+
+  .controls{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;
+            display:grid;grid-template-columns:1.6fr 1fr;gap:14px 22px;margin:14px 0}
+  .controls textarea{width:100%;height:64px;font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;
+            border:1px solid var(--line);border-radius:4px;padding:8px;resize:vertical;color:var(--ink)}
+  .row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:8px}
+  label{font-size:13px;color:var(--ink2)}
+  label b{color:var(--ink);font-weight:500}
+  select,input[type=number]{font:13px inherit;border:1px solid var(--line);border-radius:4px;padding:3px 6px;background:#fff;color:var(--ink)}
+  input[type=range]{width:110px;vertical-align:middle;accent-color:var(--model)}
+  button{font:14px inherit;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:4px;padding:6px 14px;cursor:pointer}
+  button.quiet{background:#fff;color:var(--ink)}
+  button:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--model);outline-offset:2px}
+  .err{color:var(--accent);font-size:13px;min-height:18px}
+
+  .panels{display:flex;flex-wrap:wrap;gap:16px}
+  figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 10px 8px;flex:0 0 auto}
+  figcaption{font-size:13px;color:var(--ink2);margin:0 2px 6px;display:flex;justify-content:space-between;gap:8px}
+  figcaption b{color:var(--ink);font-weight:500}
+  canvas.view{display:block;width:340px;height:340px;border:1px solid var(--line);cursor:crosshair;background:#fff}
+  .legend{font-size:12px;color:var(--ink2);margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px}
+  .legend label{font-size:12px}
+  .sw{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:4px}
+
+  .readout{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;flex:1 1 340px}
+  .card h2{margin:0 0 8px;font-size:14px;font-weight:500;color:var(--ink2)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px}
+  td{padding:3px 0;border-bottom:1px dashed var(--line);vertical-align:top}
+  td:first-child{color:var(--ink2);width:58%}
+  td:last-child{font-family:ui-monospace,Menlo,Consolas,monospace;text-align:right}
+  tr.hi td{color:var(--accent)}
+  canvas#cLoss{display:block;width:100%;height:130px}
+  .note{font-size:12.5px;color:var(--ink2);margin-top:8px}
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+<header>
+  <h1>VAE on a 2D density <span>— train in the browser, click to inspect likelihood &amp; posterior</span></h1>
+  <p class="note">By Professor <a href="mailto:mhsung@kaist.ac.kr">Minhyuk Sung</a>, KAIST, created with Claude. Preserved as a reference for the independently developed Tree project.</p>
+  <p>Type an (unnormalized) density <code>p(x,y)</code> as a JavaScript expression in the box below. Samples are drawn from it and a 2D→2D VAE is trained on them, live.
+     Click the data panel to pick x*: you get the likelihood <code>p(x*|z)</code>, the true posterior <code>p(z|x*)</code>, the encoder's <code>q(z|x*)</code>, the ELBO and log p(x*).
+     Click the latent panel to pick z*: the decoder distribution <code>p(x|z*)</code> is drawn in the data panel.</p>
+</header>
+
+<div class="wrap">
+  <section class="controls">
+    <div>
+      <div class="row" style="margin-top:0">
+        <label>Preset <select id="preset"></select></label>
+        <span class="err" id="err"></span>
+      </div>
+      <textarea id="expr" spellcheck="false"></textarea>
+      <div class="row">
+        <button id="apply">Apply density &amp; retrain</button>
+        <button id="run" class="quiet">Start training</button>
+        <button id="reset" class="quiet">Reinitialize weights</button>
+        <label>Helpers: <code>G(x,y,mx,my,s)</code> isotropic Gaussian, <code>spiral(x,y)</code>, <code>Math.*</code>; domain [−3, 3]². Note: JS needs <code>-((a)**2)</code>, not <code>-(a)**2</code></label>
+      </div>
+    </div>
+    <div>
+      <div class="row" style="margin-top:0">
+        <label>Hidden <select id="hidden"><option>32</option><option selected>64</option><option>128</option></select></label>
+        <label>Activation <select id="act"><option>tanh</option><option>relu</option><option>elu</option></select></label>
+        <label>lr <select id="lr"><option>0.0005</option><option>0.001</option><option selected>0.002</option><option>0.005</option></select></label>
+        <label>Steps/frame <input type="range" id="spf" min="1" max="20" value="6"> <b id="spfV">6</b></label>
+      </div>
+      <div class="row">
+        <label>β (KL weight) <input type="range" id="beta" min="0" max="4" step="0.05" value="1"> <b id="betaV">1.00</b></label>
+        <label>Decoder σ <input type="range" id="sig" min="-3.9" max="0" step="0.02" value="-1.6"> <b id="sigV">0.20</b></label>
+        <label><input type="checkbox" id="learnSig" checked> learn σ</label>
+      </div>
+      <div class="row">
+        <label>Data panel background:
+          <label><input type="radio" name="bg" value="true" checked> true p(x)</label>
+          <label><input type="radio" name="bg" value="model"> model p<sub>θ</sub>(x) = ∫p(x|z)p(z)dz</label>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <section class="panels">
+    <figure>
+      <figcaption><b>Data space x</b><span id="capData">click to choose x*</span></figcaption>
+      <canvas class="view" id="cData" width="340" height="340"></canvas>
+      <div class="legend">
+        <label><input type="checkbox" id="showData" checked> training samples</label>
+        <label><input type="checkbox" id="showDec" checked> decoded z∼p(z)</label>
+        <label><input type="checkbox" id="showGrid" checked> decoder image of latent grid</label>
+      </div>
+    </figure>
+    <figure>
+      <figcaption><b>Latent space z</b><span id="capLat">click to choose z*</span></figcaption>
+      <canvas class="view" id="cLat" width="340" height="340"></canvas>
+      <div class="legend">
+        <label><input type="checkbox" id="showEnc" checked> encoder means μ(x), colored by x</label>
+        <span><span class="sw" style="background:var(--accent)"></span>q(z|x*) 1σ, 2σ</span>
+        <span>background: true posterior p(z|x*)</span>
+      </div>
+    </figure>
+    <figure>
+      <figcaption><b>Likelihood p(x*|z) over z</b><span id="capLik">choose x* first</span></figcaption>
+      <canvas class="view" id="cLik" width="340" height="340"></canvas>
+      <div class="legend">
+        <span>posterior ∝ likelihood × prior; the gap between the accent ellipse and the dark region is the amortization error</span>
+      </div>
+    </figure>
+  </section>
+
+  <section class="readout">
+    <div class="card">
+      <h2>Selected point x*</h2>
+      <table id="statX"><tr><td>Click a point in the data panel.</td><td></td></tr></table>
+      <p class="note">log p<sub>θ</sub>(x*) is computed by numerically integrating p(x*|z)p(z) over the 2D latent grid, so the gap log p<sub>θ</sub>(x*) − ELBO(x*) equals KL(q(z|x*) ‖ p(z|x*)) exactly (up to grid error).</p>
+    </div>
+    <div class="card">
+      <h2>Training</h2>
+      <table id="statT"></table>
+      <canvas id="cLoss" width="340" height="130"></canvas>
+      <div class="legend"><span><span class="sw" style="background:var(--model)"></span>−ELBO</span><span><span class="sw" style="background:var(--accent)"></span>recon −E log p(x|z)</span><span><span class="sw" style="background:var(--latent)"></span>KL(q‖p)</span></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+'use strict';
+if (typeof tf === 'undefined') { document.getElementById('err').textContent = 'TensorFlow.js failed to load (network?).'; return; }
+
+// ---------- constants ----------
+const S = 340, XR = 3.0, ZR = 3.5, GN = 90, ZN = 70;
+const NDATA = 4000, NPLOT = 1500, NPRIOR = 400, KMODEL = 256, MELBO = 512, B = 256;
+const LOG2PI = Math.log(2*Math.PI);
+const toPx = (v,R)=> (v+R)/(2*R)*S, fromPx = (p,R)=> p/S*2*R - R;
+const $ = id => document.getElementById(id);
+
+const PRESETS = {
+  'Eight Gaussians': '[0,1,2,3,4,5,6,7].reduce((s,k)=>s+G(x,y,2*Math.cos(k*Math.PI/4),2*Math.sin(k*Math.PI/4),0.25),0)',
+  'Two moons': 'Math.exp(-((Math.hypot(x+0.75,y+0.4)-1.5)**2)/0.06)*(y>-0.4) + Math.exp(-((Math.hypot(x-0.75,y-0.35)-1.5)**2)/0.06)*(y<0.35)',
+  'Ring': 'Math.exp(-((Math.hypot(x,y)-2)**2)/(2*0.2**2))',
+  'Banana': 'Math.exp(-x*x/6 - (y-0.4*x*x+1)**2/0.15)',
+  'Spiral': 'spiral(x,y)',
+  'Checkerboard': '(Math.abs((Math.floor(x)+Math.floor(y))%2)==0 && Math.abs(x)<2.5 && Math.abs(y)<2.5) ? 1 : 0',
+  'Anisotropic Gaussian': 'Math.exp(-(x*x/(2*1.5**2) + y*y/(2*0.3**2)))',
+  'Unequal mixture (0.8 / 0.2)': '0.8*G(x,y,-1.2,0,0.4) + 0.2*G(x,y,1.5,1,0.3)'
+};
+
+// ---------- density ----------
+const spiralPts = []; for (let k=0;k<90;k++){ const t=0.6+k*(3.1*Math.PI-0.6)/89; const r=0.27*t; spiralPts.push([r*Math.cos(t), r*Math.sin(t)]); }
+function compileDensity(expr){
+  const G=(x,y,mx,my,s)=>Math.exp(-((x-mx)**2+(y-my)**2)/(2*s*s));
+  const spiral=(x,y)=>{let s=0; for(const p of spiralPts) s+=G(x,y,p[0],p[1],0.15); return s;};
+  const f = new Function('x','y','G','spiral','return ('+expr+');');
+  const test = f(0.3,-0.2,G,spiral); if (typeof test !== 'number') throw new Error('expression must return a number');
+  return (x,y)=>{ const v=f(x,y,G,spiral); return (isFinite(v)&&v>0)?v:0; };
+}
+
+let densFn, trueGrid, trueNorm, trueHeat, samples, sampleColors, dataTensor;
+function colorOf(x,y,R){ const h=Math.atan2(y,x)*180/Math.PI; const r=Math.min(1,Math.hypot(x,y)/R); return `hsl(${h.toFixed(0)},${(50+35*r).toFixed(0)}%,${(66-32*r).toFixed(0)}%)`; }
+
+function makeHeat(vals,N,rgb,gamma){
+  const oc=document.createElement('canvas'); oc.width=N; oc.height=N;
+  const ctx=oc.getContext('2d'); const img=ctx.createImageData(N,N);
+  let mx=0; for(let i=0;i<vals.length;i++) if(vals[i]>mx) mx=vals[i];
+  for(let j=0;j<N;j++) for(let i=0;i<N;i++){
+    const t = mx>0 ? Math.pow(vals[j*N+i]/mx, gamma) : 0; const p=((N-1-j)*N+i)*4;
+    img.data[p]=255+(rgb[0]-255)*t; img.data[p+1]=255+(rgb[1]-255)*t; img.data[p+2]=255+(rgb[2]-255)*t; img.data[p+3]=255;
+  }
+  ctx.putImageData(img,0,0); return oc;
+}
+
+function setDensity(expr){
+  densFn = compileDensity(expr);
+  trueGrid = new Float32Array(GN*GN); let sum=0;
+  const cell = 2*XR/GN;
+  for(let j=0;j<GN;j++) for(let i=0;i<GN;i++){ const v=densFn(-XR+(i+0.5)*cell, -XR+(j+0.5)*cell); trueGrid[j*GN+i]=v; sum+=v; }
+  if (sum<=0) throw new Error('density is zero everywhere on [-3,3]²');
+  trueNorm = 1/(sum*cell*cell);
+  trueHeat = makeHeat(trueGrid, GN, [58,86,166], 0.6);
+  // sample by grid cell + jitter
+  const cum=new Float64Array(GN*GN); let c=0; for(let k=0;k<cum.length;k++){ c+=trueGrid[k]; cum[k]=c; }
+  samples=new Float32Array(NDATA*2); sampleColors=new Array(NDATA);
+  for(let n=0;n<NDATA;n++){
+    const u=Math.random()*c; let lo=0,hi=cum.length-1; while(lo<hi){ const m=(lo+hi)>>1; if(cum[m]<u) lo=m+1; else hi=m; }
+    const i=lo%GN, j=Math.floor(lo/GN);
+    const x=-XR+(i+Math.random())*cell, y=-XR+(j+Math.random())*cell;
+    samples[2*n]=x; samples[2*n+1]=y; sampleColors[n]=colorOf(x,y,XR);
+  }
+  if (dataTensor) dataTensor.dispose();
+  dataTensor = tf.tensor2d(samples,[NDATA,2]);
+}
+
+// ---------- model ----------
+let enc, dec, decLogVar, opt, zPrior, gridX, zGrid, step=0, hist={rec:[],kl:[],tot:[]};
+let running=false, selX=null, selZ=null, analysis=null, modelHeat=null, modelHeatAge=1e9, frame=0;
+let lastRec=NaN,lastKL=NaN,lastTot=NaN;
+
+function buildModel(){
+  if (enc){ enc.dispose(); dec.dispose(); decLogVar.dispose(); }
+  const H=+$('hidden').value, act=$('act').value;
+  enc = tf.sequential({layers:[tf.layers.dense({units:H,activation:act,inputShape:[2]}), tf.layers.dense({units:H,activation:act}), tf.layers.dense({units:4})]});
+  dec = tf.sequential({layers:[tf.layers.dense({units:H,activation:act,inputShape:[2]}), tf.layers.dense({units:H,activation:act}), tf.layers.dense({units:2})]});
+  decLogVar = tf.variable(tf.scalar(2*sigmaSlider()));
+  opt = tf.train.adam(+$('lr').value);
+  step=0; hist={rec:[],kl:[],tot:[]}; analysis=null; modelHeat=null; modelHeatAge=1e9;
+  if (!zPrior){
+    zPrior = tf.randomNormal([NPRIOR,2]);
+    const gx=[]; const cell=2*XR/GN; for(let j=0;j<GN;j++) for(let i=0;i<GN;i++) gx.push(-XR+(i+0.5)*cell, -XR+(j+0.5)*cell);
+    gridX = tf.tensor2d(gx,[GN*GN,2]);
+    const gz=[]; const zc=2*ZR/ZN; for(let j=0;j<ZN;j++) for(let i=0;i<ZN;i++) gz.push(-ZR+(i+0.5)*zc, -ZR+(j+0.5)*zc);
+    zGrid = tf.tensor2d(gz,[ZN*ZN,2]);
+  }
+}
+function sigmaSlider(){ return Math.log(Math.exp(+$('sig').value)); } // slider holds log σ
+function decLV(){ return tf.maximum(decLogVar, -8); }
+
+function trainStep(){
+  const beta=+$('beta').value, learn=$('learnSig').checked;
+  if (!learn) tf.tidy(()=>decLogVar.assign(tf.scalar(2*sigmaSlider())));
+  const vars=[...enc.trainableWeights,...dec.trainableWeights].map(w=>w.val); if(learn) vars.push(decLogVar);
+  const idx=tf.tensor1d(Array.from({length:B},()=>Math.floor(Math.random()*NDATA)),'int32');
+  let recK,klK;
+  const cost=opt.minimize(()=>{
+    const xb=tf.gather(dataTensor,idx);
+    const h=enc.apply(xb); const mu=h.slice([0,0],[-1,2]), lv=h.slice([0,2],[-1,2]);
+    const z=mu.add(tf.randomNormal([B,2]).mul(lv.mul(0.5).exp()));
+    const xh=dec.apply(z); const dlv=decLV();
+    const rec=xh.sub(xb).square().div(dlv.exp()).add(dlv).add(LOG2PI).mul(0.5).sum(1).mean();
+    const kl=tf.scalar(1).add(lv).sub(mu.square()).sub(lv.exp()).sum(1).mul(-0.5).mean();
+    recK=tf.keep(rec); klK=tf.keep(kl);
+    return rec.add(kl.mul(beta));
+  },true,vars);
+  lastRec=recK.dataSync()[0]; lastKL=klK.dataSync()[0]; lastTot=lastRec+lastKL;
+  recK.dispose(); klK.dispose(); cost.dispose(); idx.dispose(); step++;
+}
+
+// ---------- model-side computations ----------
+function encodePlot(){ return tf.tidy(()=>enc.apply(dataTensor.slice([0,0],[NPLOT,2])).dataSync()); }
+function decodePrior(){ return tf.tidy(()=>dec.apply(zPrior).dataSync()); }
+function decoderSigma(){ return Math.exp(0.5*Math.max(-8, decLogVar.dataSync()[0])); }
+function latentGridLines(){
+  const L=9,P=41,pts=[]; for(let a=0;a<L;a++){ const c=-2+4*a/(L-1); for(let b=0;b<P;b++){ pts.push(c,-2+4*b/(P-1)); } }
+  for(let a=0;a<L;a++){ const c=-2+4*a/(L-1); for(let b=0;b<P;b++){ pts.push(-2+4*b/(P-1),c); } }
+  const out=tf.tidy(()=>dec.apply(tf.tensor2d(pts,[2*L*P,2])).dataSync()); return {pts,out,L,P};
+}
+function computeModelHeat(){
+  const vals=tf.tidy(()=>{
+    const mu=dec.apply(zPrior.slice([0,0],[KMODEL,2])); const dlv=decLV();
+    const d2=gridX.reshape([GN*GN,1,2]).sub(mu.reshape([1,KMODEL,2])).square().sum(2);
+    const lp=tf.logSumExp(d2.mul(-0.5).div(dlv.exp()).sub(dlv).sub(LOG2PI),1).sub(Math.log(KMODEL));
+    return lp.exp().dataSync();
+  });
+  modelHeat=makeHeat(vals,GN,[58,86,166],0.6); modelHeatAge=0;
+}
+function analyze(x){
+  const r=tf.tidy(()=>{
+    const xt=tf.tensor2d([x],[1,2]); const dlv=decLV(); const s2=dlv.exp();
+    // likelihood over latent grid
+    const muG=dec.apply(zGrid);
+    const ll=muG.sub(xt).square().sum(1).mul(-0.5).div(s2).sub(dlv).sub(LOG2PI);       // log N(x; μ(z), σ²I)
+    const lpz=zGrid.square().sum(1).mul(-0.5).sub(LOG2PI);
+    const lj=ll.add(lpz);
+    // encoder
+    const h=enc.apply(xt); const mu=h.slice([0,0],[1,2]), lv=h.slice([0,2],[1,2]);
+    const zs=tf.randomNormal([MELBO,2]).mul(lv.mul(0.5).exp()).add(mu);
+    const xh=dec.apply(zs);
+    const eLL=xh.sub(xt).square().sum(1).mul(-0.5).div(s2).sub(dlv).sub(LOG2PI).mean();
+    const kl=tf.scalar(1).add(lv).sub(mu.square()).sub(lv.exp()).sum(1).mul(-0.5);
+    const recon=dec.apply(mu);
+    return {ll:ll.dataSync(), lj:lj.dataSync(), mu:mu.dataSync(), lv:lv.dataSync(), eLL:eLL.dataSync()[0], kl:kl.dataSync()[0], recon:recon.dataSync(), s2:s2.dataSync()[0]};
+  });
+  let m=-Infinity; for(const v of r.lj) if(v>m) m=v;
+  let sum=0; const post=new Float32Array(r.lj.length); for(let k=0;k<post.length;k++){ post[k]=Math.exp(r.lj[k]-m); sum+=post[k]; }
+  const zc=2*ZR/ZN; const logpx=m+Math.log(sum)+2*Math.log(zc);
+  let ml=-Infinity; for(const v of r.ll) if(v>ml) ml=v;
+  const lik=new Float32Array(r.ll.length); for(let k=0;k<lik.length;k++) lik[k]=Math.exp(r.ll[k]-ml);
+  // true density at x
+  const cell=2*XR/GN; const i=Math.min(GN-1,Math.max(0,Math.floor((x[0]+XR)/cell))), j=Math.min(GN-1,Math.max(0,Math.floor((x[1]+XR)/cell)));
+  const ptrue=trueGrid[j*GN+i]*trueNorm;
+  analysis={x, logpx, elbo:r.eLL-r.kl, eLL:r.eLL, klq:r.kl, mu:r.mu, sig:[Math.exp(0.5*r.lv[0]),Math.exp(0.5*r.lv[1])], recon:r.recon, sigma:Math.sqrt(r.s2), ptrue,
+            postHeat:makeHeat(post,ZN,[194,24,91],0.5), likHeat:makeHeat(lik,ZN,[58,86,166],0.5)};
+}
+
+// ---------- drawing ----------
+const cData=$('cData'), cLat=$('cLat'), cLik=$('cLik'), cLoss=$('cLoss');
+function frameBox(ctx,R){
+  ctx.strokeStyle='#E3E7EC'; ctx.lineWidth=1; ctx.beginPath();
+  ctx.moveTo(toPx(0,R),0); ctx.lineTo(toPx(0,R),S); ctx.moveTo(0,S-toPx(0,R)); ctx.lineTo(S,S-toPx(0,R)); ctx.stroke();
+}
+function ellipse(ctx,cx,cy,rx,ry,R,color,dash){
+  ctx.strokeStyle=color; ctx.setLineDash(dash||[]); ctx.lineWidth=1.6;
+  ctx.beginPath(); ctx.ellipse(toPx(cx,R),S-toPx(cy,R),Math.max(0.5,rx*S/(2*R)),Math.max(0.5,ry*S/(2*R)),0,0,2*Math.PI); ctx.stroke(); ctx.setLineDash([]);
+}
+function marker(ctx,x,y,R,color){
+  const px=toPx(x,R),py=S-toPx(y,R); ctx.strokeStyle=color; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(px-7,py); ctx.lineTo(px+7,py); ctx.moveTo(px,py-7); ctx.lineTo(px,py+7); ctx.stroke();
+  ctx.beginPath(); ctx.arc(px,py,4,0,2*Math.PI); ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke();
+}
+function drawData(){
+  const ctx=cData.getContext('2d'); ctx.clearRect(0,0,S,S); ctx.imageSmoothingEnabled=true;
+  const bgModel=document.querySelector('input[name=bg]:checked').value==='model';
+  if (bgModel){ if(!modelHeat||modelHeatAge>40) computeModelHeat(); ctx.drawImage(modelHeat,0,0,S,S); } else ctx.drawImage(trueHeat,0,0,S,S);
+  frameBox(ctx,XR);
+  if ($('showGrid').checked){
+    const g=latentGridLines(); ctx.strokeStyle='rgba(30,40,60,0.28)'; ctx.lineWidth=1;
+    for(let a=0;a<2*g.L;a++){ ctx.beginPath(); for(let b=0;b<g.P;b++){ const k=(a*g.P+b)*2; const px=toPx(g.out[k],XR),py=S-toPx(g.out[k+1],XR); b?ctx.lineTo(px,py):ctx.moveTo(px,py); } ctx.stroke(); }
+  }
+  if ($('showData').checked){ for(let n=0;n<NPLOT;n++){ ctx.fillStyle=sampleColors[n]; ctx.globalAlpha=0.75; ctx.beginPath(); ctx.arc(toPx(samples[2*n],XR),S-toPx(samples[2*n+1],XR),1.7,0,2*Math.PI); ctx.fill(); } ctx.globalAlpha=1; }
+  if ($('showDec').checked){
+    const d=decodePrior(), zp=zPrior.dataSync();
+    for(let n=0;n<NPRIOR;n++){ ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(toPx(d[2*n],XR),S-toPx(d[2*n+1],XR),3,0,2*Math.PI); ctx.fill();
+      ctx.fillStyle=colorOf(zp[2*n],zp[2*n+1],2.5); ctx.beginPath(); ctx.arc(toPx(d[2*n],XR),S-toPx(d[2*n+1],XR),2.2,0,2*Math.PI); ctx.fill(); }
+  }
+  const sg=decoderSigma();
+  if (selZ){ const m=tf.tidy(()=>dec.apply(tf.tensor2d([selZ],[1,2])).dataSync());
+    ellipse(ctx,m[0],m[1],sg,sg,XR,'#0E7C86'); ellipse(ctx,m[0],m[1],2*sg,2*sg,XR,'#0E7C86',[4,3]); marker(ctx,m[0],m[1],XR,'#0E7C86'); }
+  if (analysis){ ellipse(ctx,analysis.recon[0],analysis.recon[1],sg,sg,XR,'rgba(194,24,91,0.6)',[3,3]);
+    ctx.strokeStyle='rgba(194,24,91,0.5)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(toPx(analysis.x[0],XR),S-toPx(analysis.x[1],XR)); ctx.lineTo(toPx(analysis.recon[0],XR),S-toPx(analysis.recon[1],XR)); ctx.stroke(); }
+  if (selX) marker(ctx,selX[0],selX[1],XR,'#C2185B');
+}
+function priorRings(ctx){ ctx.strokeStyle='#B9C2CC'; ctx.setLineDash([3,4]); ctx.lineWidth=1; for(const r of [1,2,3]){ ctx.beginPath(); ctx.arc(S/2,S/2,r*S/(2*ZR),0,2*Math.PI); ctx.stroke(); } ctx.setLineDash([]); }
+function drawLatent(){
+  const ctx=cLat.getContext('2d'); ctx.clearRect(0,0,S,S); ctx.imageSmoothingEnabled=true;
+  if (analysis) ctx.drawImage(analysis.postHeat,0,0,S,S);
+  frameBox(ctx,ZR); priorRings(ctx);
+  if ($('showGrid').checked){ ctx.strokeStyle='rgba(30,40,60,0.18)'; for(let a=0;a<9;a++){ const c=toPx(-2+4*a/8,ZR); ctx.beginPath(); ctx.moveTo(c,S-toPx(-2,ZR)); ctx.lineTo(c,S-toPx(2,ZR)); ctx.moveTo(toPx(-2,ZR),S-c); ctx.lineTo(toPx(2,ZR),S-c); ctx.stroke(); } }
+  if ($('showEnc').checked){ const e=encodePlot(); ctx.globalAlpha=0.7; for(let n=0;n<NPLOT;n++){ ctx.fillStyle=sampleColors[n]; ctx.beginPath(); ctx.arc(toPx(e[4*n],ZR),S-toPx(e[4*n+1],ZR),1.7,0,2*Math.PI); ctx.fill(); } ctx.globalAlpha=1; }
+  if (analysis){ ellipse(ctx,analysis.mu[0],analysis.mu[1],analysis.sig[0],analysis.sig[1],ZR,'#C2185B'); ellipse(ctx,analysis.mu[0],analysis.mu[1],2*analysis.sig[0],2*analysis.sig[1],ZR,'#C2185B',[4,3]); marker(ctx,analysis.mu[0],analysis.mu[1],ZR,'#C2185B'); }
+  if (selZ) marker(ctx,selZ[0],selZ[1],ZR,'#0E7C86');
+}
+function drawLik(){
+  const ctx=cLik.getContext('2d'); ctx.clearRect(0,0,S,S); ctx.imageSmoothingEnabled=true;
+  if (!analysis){ ctx.fillStyle='#8A94A0'; ctx.font='14px system-ui,sans-serif'; ctx.textAlign='center'; ctx.fillText('Click a point x* in the data panel',S/2,S/2); return; }
+  ctx.drawImage(analysis.likHeat,0,0,S,S); frameBox(ctx,ZR); priorRings(ctx);
+  ellipse(ctx,analysis.mu[0],analysis.mu[1],analysis.sig[0],analysis.sig[1],ZR,'#C2185B'); ellipse(ctx,analysis.mu[0],analysis.mu[1],2*analysis.sig[0],2*analysis.sig[1],ZR,'#C2185B',[4,3]);
+  if (selZ) marker(ctx,selZ[0],selZ[1],ZR,'#0E7C86');
+}
+function drawLoss(){
+  const ctx=cLoss.getContext('2d'); const W=cLoss.width,H=cLoss.height; ctx.clearRect(0,0,W,H);
+  const n=hist.tot.length; if(n<2) return;
+  let lo=Infinity,hi=-Infinity; for(const k of ['rec','kl','tot']) for(const v of hist[k]){ if(v<lo)lo=v; if(v>hi)hi=v; }
+  if(!(hi>lo)){hi=lo+1;}
+  const pad=4, y=v=>H-pad-(v-lo)/(hi-lo)*(H-2*pad);
+  ctx.strokeStyle='#E3E7EC'; ctx.beginPath(); ctx.moveTo(0,y(0)); ctx.lineTo(W,y(0)); ctx.stroke();
+  const cols={tot:'#3A56A6',rec:'#C2185B',kl:'#0E7C86'};
+  for(const k of ['tot','rec','kl']){ ctx.strokeStyle=cols[k]; ctx.lineWidth=1.5; ctx.beginPath(); hist[k].forEach((v,i)=>{ const px=i/(n-1)*W; i?ctx.lineTo(px,y(v)):ctx.moveTo(px,y(v)); }); ctx.stroke(); }
+  ctx.fillStyle='#5A6675'; ctx.font='11px system-ui,sans-serif'; ctx.textAlign='left'; ctx.fillText(hi.toFixed(2),2,10); ctx.fillText(lo.toFixed(2),2,H-2);
+}
+const f3=v=>Number.isFinite(v)?v.toFixed(3):'—';
+function writeStats(){
+  const T=$('statT');
+  T.innerHTML=`<tr><td>steps</td><td>${step}</td></tr><tr><td>−ELBO (batch)</td><td>${f3(lastTot)}</td></tr><tr><td>recon term −E<sub>q</sub>[log p(x|z)]</td><td>${f3(lastRec)}</td></tr><tr><td>KL(q(z|x) ‖ p(z))</td><td>${f3(lastKL)}</td></tr><tr><td>decoder σ</td><td>${f3(decoderSigma())}</td></tr><tr><td>β</td><td>${(+$('beta').value).toFixed(2)}</td></tr>`;
+  const X=$('statX'); if(!analysis) return; const a=analysis;
+  X.innerHTML=`<tr><td>x*</td><td>(${a.x[0].toFixed(2)}, ${a.x[1].toFixed(2)})</td></tr>
+  <tr><td>log p<sub>data</sub>(x*) — true, normalized</td><td>${a.ptrue>0?f3(Math.log(a.ptrue)):'−∞'}</td></tr>
+  <tr class="hi"><td>log p<sub>θ</sub>(x*) — ∫ over z grid</td><td>${f3(a.logpx)}</td></tr>
+  <tr><td>ELBO(x*)</td><td>${f3(a.elbo)}</td></tr>
+  <tr><td>gap = KL(q(z|x*) ‖ p(z|x*))</td><td>${f3(a.logpx-a.elbo)}</td></tr>
+  <tr><td>E<sub>q</sub>[log p(x*|z)]</td><td>${f3(a.eLL)}</td></tr>
+  <tr><td>KL(q(z|x*) ‖ p(z))</td><td>${f3(a.klq)}</td></tr>
+  <tr><td>q(z|x*): μ, σ</td><td>(${a.mu[0].toFixed(2)}, ${a.mu[1].toFixed(2)}) · (${a.sig[0].toFixed(2)}, ${a.sig[1].toFixed(2)})</td></tr>
+  <tr><td>reconstruction dec(μ<sub>q</sub>)</td><td>(${a.recon[0].toFixed(2)}, ${a.recon[1].toFixed(2)})</td></tr>`;
+}
+
+// ---------- loop ----------
+let acc={rec:0,kl:0,tot:0,n:0};
+function loop(){
+  frame++;
+  if (running){ const spf=+$('spf').value; for(let s=0;s<spf;s++){ trainStep(); acc.rec+=lastRec; acc.kl+=lastKL; acc.tot+=lastTot; acc.n++; }
+    if(acc.n){ hist.rec.push(acc.rec/acc.n); hist.kl.push(acc.kl/acc.n); hist.tot.push(acc.tot/acc.n); acc={rec:0,kl:0,tot:0,n:0}; for(const k in hist) if(hist[k].length>500) hist[k].shift(); }
+    modelHeatAge++; if (selX && frame%4===0) analyze(selX); }
+  drawData(); drawLatent(); drawLik(); drawLoss(); writeStats();
+  requestAnimationFrame(loop);
+}
+
+// ---------- events ----------
+const presetSel=$('preset'); for(const k in PRESETS){ const o=document.createElement('option'); o.textContent=k; presetSel.appendChild(o); }
+presetSel.onchange=()=>{ $('expr').value=PRESETS[presetSel.value]; applyDensity(); };
+$('expr').value=PRESETS['Eight Gaussians'];
+function applyDensity(){
+  try{ setDensity($('expr').value); $('err').textContent=''; }
+  catch(e){ $('err').textContent='Density error: '+e.message; return; }
+  selX=null; selZ=null; buildModel(); if(!running) toggleRun(true);
+}
+function toggleRun(on){ running=on===undefined?!running:on; $('run').textContent=running?'Pause training':'Start training'; }
+$('apply').onclick=applyDensity; $('run').onclick=()=>toggleRun(); $('reset').onclick=()=>{ buildModel(); selZ=null; if(selX) analyze(selX); };
+$('hidden').onchange=$('act').onchange=()=>{ buildModel(); if(selX) analyze(selX); };
+$('lr').onchange=()=>{ opt=tf.train.adam(+$('lr').value); };
+$('spf').oninput=()=>$('spfV').textContent=$('spf').value;
+$('beta').oninput=()=>$('betaV').textContent=(+$('beta').value).toFixed(2);
+$('sig').oninput=()=>{ $('sigV').textContent=Math.exp(+$('sig').value).toFixed(2); if(!$('learnSig').checked) decLogVar.assign(tf.scalar(2*sigmaSlider())); };
+$('learnSig').onchange=()=>{ if(!$('learnSig').checked) decLogVar.assign(tf.scalar(2*sigmaSlider())); else { $('sig').value=Math.log(decoderSigma()); $('sigV').textContent=decoderSigma().toFixed(2); } };
+function canvasPos(ev,c){ const r=c.getBoundingClientRect(); return [ (ev.clientX-r.left)*S/r.width, (ev.clientY-r.top)*S/r.height ]; }
+cData.onclick=ev=>{ const [px,py]=canvasPos(ev,cData); selX=[fromPx(px,XR),-fromPx(py,XR)]; analyze(selX); $('capData').textContent=`x* = (${selX[0].toFixed(2)}, ${selX[1].toFixed(2)})`; $('capLik').textContent='dark = high p(x*|z)'; $('capLat').textContent='background = p(z|x*), ellipse = q(z|x*)'; };
+const pickZ=ev=>{ const c=ev.currentTarget; const [px,py]=canvasPos(ev,c); selZ=[fromPx(px,ZR),-fromPx(py,ZR)]; $('capLat').textContent=`z* = (${selZ[0].toFixed(2)}, ${selZ[1].toFixed(2)}) → teal p(x|z*) in data panel`; };
+cLat.onclick=pickZ; cLik.onclick=pickZ;
+window.addEventListener('keydown',e=>{ if(e.key===' '&&e.target===document.body){ e.preventDefault(); toggleRun(); } if(e.key==='Escape'){ selX=null; selZ=null; analysis=null; } });
+
+// ---------- go ----------
+tf.setBackend('webgl').catch(()=>tf.setBackend('cpu')).then(()=>{ setDensity($('expr').value); buildModel(); toggleRun(true); loop(); });
+})();
+</script>
+</body>
+</html>

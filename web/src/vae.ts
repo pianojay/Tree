@@ -1,6 +1,6 @@
-import Plotly from "plotly.js-dist-min";
+import Plotly from "./draw";
 import { get, latest } from "./api";
-import { INK, SERIES, treeMarker } from "./colors";
+import { INK, SERIES, SEQ, treeMarker } from "./colors";
 import { CONFIG, ellipses, planeLayout, stripLayout, toData } from "./plot";
 import { BaseState, View, planeRow } from "./view";
 
@@ -29,6 +29,7 @@ const TEMPLATE = `
   <label><input type="checkbox" data-k="showGrid" checked> decoder grid</label>
   <label><input type="checkbox" data-k="showEll" checked> posterior ellipses</label>
   <label><input type="checkbox" data-k="showSamples" checked> model samples</label>
+  <button data-k="inspect">Inspect likelihood and posterior</button>
   <span class="stat" data-k="stat"></span>
 </div>
 <div class="plane-row" data-k="row"></div>
@@ -49,6 +50,12 @@ const TEMPLATE = `
     </ul>
     <div class="readout" data-k="readout"></div>
   </div>
+</div>
+<div class="card">
+  <h2>Likelihood and posterior at a selected data point</h2>
+  <p class="sub">Click the data plane, then inspect. Evidence and the model posterior use finite-grid quadrature; the ordinary ELBO uses a sampled expectation. The gap estimates total variational inference error.</p>
+  <div class="readout" data-k="inspectionText">Select a point to inspect; the origin is used if no point is selected.</div>
+  <div class="plane-row" data-k="inspectionPlanes"></div>
 </div>`;
 
 export class VAEView extends View<State> {
@@ -57,6 +64,8 @@ export class VAEView extends View<State> {
   dec?: Dec & { z: number[] };
   planes: Record<string, HTMLElement> = {};
   mode = "";
+  selected = [0,0];
+  private inspecting = false;
 
   constructor(root: HTMLElement) {
     super(root, TEMPLATE);
@@ -68,10 +77,11 @@ export class VAEView extends View<State> {
     };
     this.el.mode.onchange = () => this.render();
     for (const k of ["showGrid", "showEll", "showSamples"]) this.el[k].onchange = () => this.render();
+    this.el.inspect.onclick=()=>{void this.inspect().catch(e=>this.showError(e));};
   }
 
   resetConfig() { return { beta: Number((this.el.beta as HTMLInputElement).value) }; }
-  onReset() { this.enc = this.dec = undefined; }
+  onReset() { this.enc = this.dec = undefined;this.el.inspectionText.textContent='Select a point to inspect.';this.el.inspectionPlanes.replaceChildren(); }
 
   statusText(s: State) {
     const beta = this.el.beta as HTMLInputElement;
@@ -105,6 +115,7 @@ export class VAEView extends View<State> {
           { key: "z", title: "Latent z", sub: "prior and posteriors" },
         ], [`<span>encoder q(z | x)</span><span class="glyph">→</span><span class="glyph back">←</span><span class="back">decoder p(x | z)</span>`]);
     this.planes.x.addEventListener("mousemove", (ev) => { const p = toData(this.planes.x, ev); if (p) this.encodeAt(p); });
+    this.planes.x.addEventListener('click',ev=>{const p=toData(this.planes.x,ev);if(p){this.selected=p;this.el.inspectionText.textContent=`Selected x = (${p.map(x=>x.toFixed(2)).join(', ')}). Click Inspect likelihood and posterior.`;}});
     this.planes.z.addEventListener("mousemove", (ev) => { const z = toData(this.planes.z, ev); if (z) this.decodeAt(z); });
     for (const key of Object.keys(this.planes))
       this.planes[key].addEventListener("mouseleave", () => { this.enc = this.dec = undefined; this.renderPlanes(); });
@@ -203,6 +214,26 @@ export class VAEView extends View<State> {
     Plotly.react(this.el.loss, [
       { type: "scatter", mode: "lines", name: "reconstruction", x, y: s.history.map((h) => h[2]), line: { color: SERIES[0], width: 2 } },
       { type: "scatter", mode: "lines", name: "KL", x, y: s.history.map((h) => h[3]), line: { color: SERIES[1], width: 2 } },
+      { type: "scatter", mode: "lines", name: "ordinary −ELBO", x, y: s.history.map((h) => h[2]+h[3]), line: { color: SERIES[2], width: 1 } },
+      { type: "scatter", mode: "lines", name: "weighted objective", x, y: s.history.map((h) => h[1]), line: { color: INK.muted, width: 1, dash:'dot' } },
     ], layout, CONFIG);
+  }
+  async inspect(){
+    if(this.inspecting)return;this.inspecting=true;const generation=this.state?.generation;
+    try{
+      this.el.inspectionText.textContent='Computing likelihood, posterior and evidence…';
+      const r=await get<any>(`/api/vae/inspect?x1=${this.selected[0]}&x2=${this.selected[1]}&resolution=64`);
+      if(this.state?.generation!==generation)return;
+      const planes=planeRow(this.el.inspectionPlanes,[{key:'likelihood',title:'Likelihood p(x* | z)',sub:'scaled to its maximum'},{key:'posterior',title:'Model posterior p(z | x*)',sub:'estimated by finite-grid quadrature'},{key:'q',title:'Encoder q(z | x*)',sub:'diagonal Gaussian approximation'}],['','']);
+      for(const k of ['likelihood','posterior','q']){
+        const traces:any[]=[{type:'heatmap',x:r.axis,y:r.axis,z:r[k],colorscale:SEQ}];
+        if(r.mu&&r.sigma&&k!=='likelihood'){
+          for(const scale of [1,2])traces.push({type:'scatter',mode:'lines',...ellipses([r.mu],[r.sigma],scale),line:{color:SERIES[1],width:1.5,dash:scale===2?'dot':undefined}});
+          traces.push({type:'scatter',mode:'markers',x:[r.mu[0]],y:[r.mu[1]],marker:{size:6,color:SERIES[1]}});
+        }
+        await Plotly.react(planes[k],traces,planeLayout('z₁','z₂',r.domain,340),CONFIG);
+      }
+      this.el.inspectionText.textContent=`x = (${r.x.map((x:number)=>x.toFixed(2)).join(', ')}), step ${r.step}: estimated log pθ(x) ${r.logp.toFixed(3)}; ordinary ELBO ${r.elbo.toFixed(3)} ± ${(1.96*r.mc_se).toFixed(3)} (approximate 95% Monte Carlo interval); estimated inference gap ${r.gap.toFixed(3)} nats. Grid ${r.resolution}² on [${r.domain.join(', ')}]²; ${r.samples} encoder q(z|x) samples. Quadrature truncation/discretization error is not included in the interval.`;
+    }finally{this.inspecting=false;}
   }
 }
