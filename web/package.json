@@ -9,17 +9,20 @@
     "prebuild": "node scripts/copy-wasm.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node scripts/test-runtime.mjs",
+    "test": "npm run test:tfjs && npm run test:jax && npm run test:parity",
+    "test:tfjs": "node scripts/test-runtime.mjs",
+    "test:jax": "node scripts/test-jax-runtime.mjs",
+    "test:parity": "node scripts/test-runtime-parity.mjs",
     "compare:tfjs": "node scripts/compare.mjs tfjs cpu",
     "compare:jax": "node scripts/compare.mjs jax-js wasm"
   },
   "dependencies": {
+    "@jax-js/jax": "0.1.26",
     "@tensorflow/tfjs-backend-cpu": "4.22.0",
     "@tensorflow/tfjs-backend-wasm": "4.22.0",
     "@tensorflow/tfjs-core": "4.22.0"
   },
   "devDependencies": {
-    "@jax-js/jax": "0.1.26",
     "typescript": "^7.0.2",
     "vite": "^8.3.4"
   }

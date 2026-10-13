@@ -2,6 +2,10 @@
 
 A miniature for making the abstract mathematics of generative models explicit and visible. See [whitepaper.md](docs/whitepaper.md).
 
+## jax-js experiment branch
+
+This `jax-js` branch translates the current TF.js application to jax-js while preserving the equations, GUI, and optional PyTorch server. The browser defaults to jax-js WASM; use `?engine=tfjs` for the retained TF.js worker or `?engine=server` for PyTorch. The experiment checks numerical equivalence, lifecycle behavior, and practical performance before any decision to change `main`. Its contract, findings, and remaining acceptance gates live in [docs/jax-js/](docs/jax-js/README.md).
+
 The rebuild through Phases 1–5 runs four model families in a TensorFlow.js WASM worker, with Canvas views and optional PyTorch server mode. See the [roadmap](docs/roadmap.md), [implementation contract](docs/implementation-contract.md), and [runtime comparison](docs/runtime-comparison.md). The historical TF.js and jax-js branches were deleted; their findings remain documented. See the [documentation index](docs/README.md) for reading material and development records.
 
 ## Reference VAE lab
