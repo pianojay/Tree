@@ -31,4 +31,6 @@ Production checks must use locally served built assets, with no Python requireme
 
 ## Adoption gates
 
+**Owner decision, 2026-10-13:** proceed with PyTorch + jax-js as the working pair. The [upstream assessment](upstream-assessment.md) records the rationale and remaining stability/coverage work. The criteria below were the original proposed adoption gates; outstanding checks remain tracked uncertainties, rather than overriding the owner's decision. TF.js is now a comparison baseline rather than a required target for every new feature.
+
 Passing parity establishes a usable experimental port. Adoption on main additionally requires matched full-application performance tests, sustained training/reset/configuration stress and memory observations, intended-browser coverage, and investigation of the old/new timing reversal. Record cold compilation separately from warm queries and training; include snapshot/diagnostic costs and asset transfer sizes. A faster training microbenchmark alone does not satisfy these gates.

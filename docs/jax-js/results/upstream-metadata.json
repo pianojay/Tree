@@ -1,0 +1,2193 @@
+{
+  "commits_since_20260715": [
+    {
+      "sha": "c169036a326e8888ad757239b08b25c6227fd611",
+      "date": "2026-10-13T05:45:32Z",
+      "author": "ekzhang",
+      "message": "bump version"
+    },
+    {
+      "sha": "8f1078ab3a69d6b713f4373533f4da809f323090",
+      "date": "2026-10-13T05:44:43Z",
+      "author": "ekzhang",
+      "message": "Use integer textures for WebGL buffer storage (#229)"
+    },
+    {
+      "sha": "7ab7eaac53f93a2966b60c1121832d8cf198952f",
+      "date": "2026-10-04T00:53:44Z",
+      "author": "ekzhang",
+      "message": "Fix functions that should promote to float (#226)"
+    },
+    {
+      "sha": "fd9002453905560cff3e8bb4abde744d1d4c92f2",
+      "date": "2026-09-21T22:50:15Z",
+      "author": "ipranjalks",
+      "message": "Fix: logaddexp and logaddexp2() return NaN for infinite inputs (#224)"
+    },
+    {
+      "sha": "5a058e330cecc8c02fe0bf516e74a50e4a34125b",
+      "date": "2026-09-20T15:33:19Z",
+      "author": "ipranjalks",
+      "message": "Fix: power() returns NaN for 0^0 and (+-1)^(+-inf). (#222)"
+    },
+    {
+      "sha": "6d3fcf04922e500c809f9f7f8c169b834d5df8c3",
+      "date": "2026-09-17T07:22:59Z",
+      "author": "ekzhang",
+      "message": "Clean up BitCount primitive impl"
+    },
+    {
+      "sha": "bd581f70b0b72453174c5d8c5c2fa3eeb22735df",
+      "date": "2026-09-16T23:33:06Z",
+      "author": "ekzhang",
+      "message": "Bump version"
+    },
+    {
+      "sha": "cab98eb5aeaa6e37933b69f970a8f415dd303b69",
+      "date": "2026-09-16T23:27:07Z",
+      "author": "ekzhang",
+      "message": "Implement bitwiseCount as a primitive (#220)"
+    },
+    {
+      "sha": "374507e9274b8b4d07c114c449938af7b68bdcc8",
+      "date": "2026-09-16T22:59:19Z",
+      "author": "ekzhang",
+      "message": "Fix uint32 optimizer wrapping (#219)"
+    },
+    {
+      "sha": "0e309ee20ee47a62b4e8860b2a17e81beac7a5a0",
+      "date": "2026-09-16T22:51:50Z",
+      "author": "ekzhang",
+      "message": "Fix benchmarks on vitest 5 upgrade"
+    },
+    {
+      "sha": "c42c6422f7c3da1a304e6e1fc9034273290a5d00",
+      "date": "2026-09-16T21:53:53Z",
+      "author": "ekzhang",
+      "message": "Bump to vitest 5"
+    },
+    {
+      "sha": "ef32174b3b64e44422f148078ac0cacdf50384aa",
+      "date": "2026-09-10T12:57:52Z",
+      "author": "MaxFreedomPollard",
+      "message": "Fix sign() returning 1 for NaN (#215)"
+    },
+    {
+      "sha": "970fa22d934ce2e617cd3a993c6ecc8b736496f2",
+      "date": "2026-09-06T14:37:11Z",
+      "author": "MaxFreedomPollard",
+      "message": "Fix copysign() dropping the magnitude when y is zero (#214)"
+    },
+    {
+      "sha": "5b57241e68d7ba01c1b4fb32848f43f291c4c173",
+      "date": "2026-08-31T15:34:17Z",
+      "author": "ekzhang",
+      "message": "Bump package version"
+    },
+    {
+      "sha": "c6be6cf4453689df652b52c50fb2d959df5463ca",
+      "date": "2026-08-31T15:33:07Z",
+      "author": "dtran24",
+      "message": "Add nan* functions (#211)"
+    },
+    {
+      "sha": "8eb3a0ed757bf99b43db20ee98d7c24048f9985a",
+      "date": "2026-08-27T23:26:58Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.nancumsum (#212)"
+    },
+    {
+      "sha": "faeadd2b861418d745d1563437be3a63d2d6dd3a",
+      "date": "2026-08-27T17:36:31Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.nanprod (#210)"
+    },
+    {
+      "sha": "70fa903dab4fb4d1e21a8625d41a11673e6458f0",
+      "date": "2026-08-27T17:27:40Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.nancumprod (#209)"
+    },
+    {
+      "sha": "2a0de83b121d9806b0ef50cc93c3dccfca21a4b5",
+      "date": "2026-08-27T17:27:26Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.nansum (#208)"
+    },
+    {
+      "sha": "631c97117c2a2856254c9693028ca085c03aed2f",
+      "date": "2026-08-22T18:57:02Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.polyder (#203)"
+    },
+    {
+      "sha": "4014cc4979c76257ba160d6dc8fc4c978d03e0c4",
+      "date": "2026-08-20T01:54:24Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.select (#205)"
+    },
+    {
+      "sha": "f787aa9586b96991c1aa3ea7afedbe4fe15ac53b",
+      "date": "2026-08-17T01:57:33Z",
+      "author": "ekzhang",
+      "message": "bump package version"
+    },
+    {
+      "sha": "134bfe2882b1ebc40bfe0d34442ab1f9852997fb",
+      "date": "2026-08-17T01:51:09Z",
+      "author": "MoRevolution",
+      "message": "Work around Firefox's 100ms WebGPU completion poll (#124)"
+    },
+    {
+      "sha": "57ebe3a81e34287382315f3fd6ead37d762b04eb",
+      "date": "2026-08-16T18:35:33Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.polymul (#202)"
+    },
+    {
+      "sha": "7ad6ad8fa37dd78a7fbb6dba854d5bbadf4b496c",
+      "date": "2026-08-15T23:27:28Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.modf (#200)"
+    },
+    {
+      "sha": "b46a63ac726ec54334388ef14e7363a715db8ee3",
+      "date": "2026-08-15T23:26:59Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.fromfunction (#201)"
+    },
+    {
+      "sha": "a53da4d630302833bf5704fbc1a6fbae5f52f558",
+      "date": "2026-08-14T16:20:42Z",
+      "author": "dtran24",
+      "message": "Add nn.log1mexp (#199)"
+    },
+    {
+      "sha": "2a9adce942efa6a1f0ac0651658721cc2bf8acdb",
+      "date": "2026-08-14T02:11:23Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.unwrap (#198)"
+    },
+    {
+      "sha": "34523e4baaf8ef1b069a7fc6fdbe70545c3b754f",
+      "date": "2026-08-13T01:40:51Z",
+      "author": "ekzhang",
+      "message": "jax version 0.1.22"
+    },
+    {
+      "sha": "bbdd1e3efe3e245ce4d6afc24045462ed06228d7",
+      "date": "2026-08-13T01:40:10Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.diff (#189)"
+    },
+    {
+      "sha": "3fb785ae3c3e86098280c34c2d8ae0f71fddb16a",
+      "date": "2026-08-13T01:28:48Z",
+      "author": "ekzhang",
+      "message": "Bump feature completion percentage"
+    },
+    {
+      "sha": "1e414e236fa4af77286473dc9bbf21f0ccd08347",
+      "date": "2026-08-13T01:28:40Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.ediff1d (#191)"
+    },
+    {
+      "sha": "e2df68acc772cc7b8768076d11b079bd651936e8",
+      "date": "2026-08-13T01:18:45Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.indices (#185)"
+    },
+    {
+      "sha": "33ca2e8dfd1293039125064e48eeea554d72ff04",
+      "date": "2026-08-13T01:12:49Z",
+      "author": "ekzhang",
+      "message": "Faster cumulative ops, fix broadcast bug (#196)"
+    },
+    {
+      "sha": "5cc5fb67b1c28e209a4898d17954ea8b1601fb3c",
+      "date": "2026-08-13T01:09:57Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.geomspace (#190)"
+    },
+    {
+      "sha": "a004fd21f82c175f0f81395ca5ebcd2f9ea19e6d",
+      "date": "2026-08-13T01:09:22Z",
+      "author": "ekzhang",
+      "message": "Fix tolerances for FFT tests (#197)"
+    },
+    {
+      "sha": "a88a9d58d6f56365a49ef6d1517178c9976e560c",
+      "date": "2026-08-13T00:28:49Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.polyval (#193)"
+    },
+    {
+      "sha": "e0b25df359b384fd32c3e82dca12f9b1ff91594f",
+      "date": "2026-08-13T00:20:17Z",
+      "author": "Modjular",
+      "message": "Add upload button to mobileclip example (#194)"
+    },
+    {
+      "sha": "d95a6d59fc64512d9c711f7d150fc67e0cc6af25",
+      "date": "2026-08-13T00:16:23Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.trapezoid (#195)"
+    },
+    {
+      "sha": "abcd746f2d17b0ae34bb644db1a6eeafd9838fcd",
+      "date": "2026-08-13T00:12:12Z",
+      "author": "ekzhang",
+      "message": "Bump sveltekit on website after pnpm audit"
+    },
+    {
+      "sha": "86c9f42793666a93366c3092c0fd6794caefc810",
+      "date": "2026-08-12T18:14:27Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.linalg.norm (#187)"
+    },
+    {
+      "sha": "550222383d5230d56e08ff146e2a0dd93f2ed749",
+      "date": "2026-08-08T16:20:36Z",
+      "author": "dtran24",
+      "message": "Add numpy diagflat (#184)"
+    },
+    {
+      "sha": "4fc07394d3788d573df0e41e7bb9ba0358a1e21a",
+      "date": "2026-08-08T16:05:47Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.vsplit (#183)"
+    },
+    {
+      "sha": "b23698a1f46ab28b6bce7e8727e7ab445a37893c",
+      "date": "2026-08-08T16:00:38Z",
+      "author": "elrensmin",
+      "message": "Fix mean() truncating integer and boolean inputs (#186)"
+    },
+    {
+      "sha": "ea4d8daed9a37eb0b561fa1cffe7863aa578c979",
+      "date": "2026-08-07T15:38:35Z",
+      "author": "ekzhang",
+      "message": "Bump package versions"
+    },
+    {
+      "sha": "28afddb8310b3ab15a04532db4ae7cf26ece28ef",
+      "date": "2026-08-07T15:34:45Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.polysub (#177)"
+    },
+    {
+      "sha": "c4b09df539db8825a59e768eb923f03ddf2daab2",
+      "date": "2026-08-07T15:28:40Z",
+      "author": "ekzhang",
+      "message": "Add LFM2.5-350M support to /chat page (#182)"
+    },
+    {
+      "sha": "83e336432e6cadea2a426fbe0e23df3e11db0a1d",
+      "date": "2026-08-07T15:16:41Z",
+      "author": "ekzhang",
+      "message": "Fix GQA semantics on WebGPU (#180)"
+    },
+    {
+      "sha": "5208a964143a0b99106a52f50393b99fdc1556e3",
+      "date": "2026-08-07T15:15:46Z",
+      "author": "ekzhang",
+      "message": "[loaders] Fix parse of special tokens (#179)"
+    },
+    {
+      "sha": "08e48d034d245224f2e3720e1c3944468873ebcd",
+      "date": "2026-08-07T15:15:26Z",
+      "author": "ekzhang",
+      "message": "[tuner] Prefer upcast of 4 over 3 (#181)"
+    },
+    {
+      "sha": "dd5db6d02cf79ad38483fd9663760978bae93112",
+      "date": "2026-08-07T15:12:55Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.polyadd (#175)"
+    },
+    {
+      "sha": "e0f8dfb8cf44bf2819f2b66aaa8eb107c264561b",
+      "date": "2026-08-07T14:29:50Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.resultType (#178)"
+    },
+    {
+      "sha": "7a9231a482281cbb1d3eedab2901917520062f8e",
+      "date": "2026-08-07T00:53:16Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.hsplit (#173)"
+    },
+    {
+      "sha": "13c34fa9cf93b47f05ad5d1bc68eabb1ff65263f",
+      "date": "2026-08-07T00:52:48Z",
+      "author": "dtran24",
+      "message": "Add numpy isscalar (#174)"
+    },
+    {
+      "sha": "f1174328027e2c067b3b750cbc08f16767db5e6a",
+      "date": "2026-08-07T00:29:07Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.unstack (#176)"
+    },
+    {
+      "sha": "f3a549eff7fa81f2cb3617241df832bc55695b25",
+      "date": "2026-08-06T15:33:38Z",
+      "author": "ekzhang",
+      "message": "Add jax-realtime"
+    },
+    {
+      "sha": "2a5ef0233402c344f3c0c7cfb7dcd93302ef9d63",
+      "date": "2026-08-06T02:20:00Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.fmax (#170)"
+    },
+    {
+      "sha": "590da6a0bfa8c965e8010bbd7e1a5da5fd71460d",
+      "date": "2026-08-06T02:15:16Z",
+      "author": "dtran24",
+      "message": "Add numpy diagIndicesFrom (#168)"
+    },
+    {
+      "sha": "ed92ebb0d3da78feb739992faa98106bcf082e83",
+      "date": "2026-08-06T00:48:00Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.fmin (#169)"
+    },
+    {
+      "sha": "44eb702ac6858790bd233fda3c172a88cebc1748",
+      "date": "2026-08-06T00:46:58Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.isin (#172)"
+    },
+    {
+      "sha": "a12af80fc164133dbdb9b385db89c80372ddb63d",
+      "date": "2026-08-06T00:45:38Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.bartlett (#171)"
+    },
+    {
+      "sha": "586ef74140d1918e1227a47ad220069c32df8b66",
+      "date": "2026-08-04T23:07:03Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.dsplit (#166)"
+    },
+    {
+      "sha": "2a8f7ea734f4004e673b2ab96d52e6fa8b42aa0c",
+      "date": "2026-08-04T23:06:26Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.floatPower (#167)"
+    },
+    {
+      "sha": "03d417d90f37198627c2f6183b759cd8a9faa49e",
+      "date": "2026-08-04T19:15:04Z",
+      "author": "dtran24",
+      "message": "Reuse array references in diagIndices (#165)"
+    },
+    {
+      "sha": "a844a465393d071b4fec6ad2e50417e45aecf985",
+      "date": "2026-08-04T00:16:54Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.signbit (#161)"
+    },
+    {
+      "sha": "50f82ad7d053a0dcc39c44271e0792f8c4fefc6c",
+      "date": "2026-08-03T23:19:14Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.diagIndices (#164)"
+    },
+    {
+      "sha": "1d3373bf0f7b18154b75e8123b1332254ce2b2e2",
+      "date": "2026-08-03T23:16:59Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.blackman (#163)"
+    },
+    {
+      "sha": "2ec5808a24de86586d74088bc063ad4f461b9566",
+      "date": "2026-08-03T23:13:03Z",
+      "author": "dtran24",
+      "message": "Fix stale API documentation links (#162)"
+    },
+    {
+      "sha": "a0e12606d76d51e0da7784fb968bcca43cf0e5fd",
+      "date": "2026-08-02T22:18:52Z",
+      "author": "dtran24",
+      "message": "Add jax.numpy.arraySplit (#159)"
+    },
+    {
+      "sha": "13035279d145e18cf32dd980981828fcc6eb1b82",
+      "date": "2026-08-02T15:49:46Z",
+      "author": "dtran24",
+      "message": "Add numpy countNonzero (#158)"
+    },
+    {
+      "sha": "2340e61bacee574172f7c44653fae0f21d1da46f",
+      "date": "2026-07-28T03:10:50Z",
+      "author": "ekzhang",
+      "message": "Bump version to 0.1.20"
+    },
+    {
+      "sha": "4d135badfc3e442eb3f191d0061ea8398512053c",
+      "date": "2026-07-27T15:00:57Z",
+      "author": "ekzhang",
+      "message": "Rename RTF display to RTFx"
+    },
+    {
+      "sha": "21103acbccce0f6b21b7c42ff2755384e82e94cf",
+      "date": "2026-07-27T04:59:38Z",
+      "author": "ekzhang",
+      "message": "Performance improvements for Wasm TTS (#157)"
+    },
+    {
+      "sha": "014ea69c096c5d6288e96c05b77d774c5131917c",
+      "date": "2026-07-27T00:51:17Z",
+      "author": "ekzhang",
+      "message": "Fix Wasm memory allocator capping at 2 GiB (#156)"
+    },
+    {
+      "sha": "361b9ab23f1d2536a5c85e2929024d48d0d5fdf5",
+      "date": "2026-07-27T00:43:13Z",
+      "author": "ekzhang",
+      "message": "Add mlajtos/fluent to readme"
+    },
+    {
+      "sha": "bf6f68bb8d9d54a7cc6d6bd3fa8fcbea56d88d8b",
+      "date": "2026-07-26T21:30:47Z",
+      "author": "ekzhang",
+      "message": "Bump to version 0.1.19"
+    },
+    {
+      "sha": "be65bd2660e0b46fe0010081ec2fe01821282d96",
+      "date": "2026-07-26T21:29:07Z",
+      "author": "ekzhang",
+      "message": "Backprop for gather/sort via `scatter` (#155)"
+    },
+    {
+      "sha": "32fe9c3bd471d2f35c67ea6389dc60da4f342885",
+      "date": "2026-07-26T20:19:18Z",
+      "author": "ekzhang",
+      "message": "Fix batched sort JVP rules (#154)"
+    },
+    {
+      "sha": "bf7895232d99a75a2b0415e9b9f4050bf1ed643b",
+      "date": "2026-07-26T20:16:29Z",
+      "author": "ekzhang",
+      "message": "Make allocation contents unspecified (#153)"
+    },
+    {
+      "sha": "56965165f301d23b1264e2e80b97f69c61dd1e86",
+      "date": "2026-07-26T18:20:08Z",
+      "author": "ekzhang",
+      "message": "Fix eager-mode grad materializing m,n,k array (#152)"
+    }
+  ],
+  "repo": {
+    "full_name": "ekzhang/jax-js",
+    "created_at": "2025-02-04T01:00:49Z",
+    "pushed_at": "2026-10-13T05:46:50Z",
+    "stargazers_count": 941,
+    "forks_count": 61,
+    "open_issues_count": 15,
+    "archived": false
+  },
+  "contributors": [
+    {
+      "login": "ekzhang",
+      "contributions": 865
+    },
+    {
+      "login": "dtran24",
+      "contributions": 41
+    },
+    {
+      "login": "abhiaiyer91",
+      "contributions": 7
+    },
+    {
+      "login": "jimfleming",
+      "contributions": 4
+    },
+    {
+      "login": "d-zg",
+      "contributions": 3
+    },
+    {
+      "login": "ipranjalks",
+      "contributions": 2
+    },
+    {
+      "login": "wukath",
+      "contributions": 2
+    },
+    {
+      "login": "MaxFreedomPollard",
+      "contributions": 2
+    },
+    {
+      "login": "mwbrulhardt",
+      "contributions": 2
+    },
+    {
+      "login": "danlee2002",
+      "contributions": 2
+    },
+    {
+      "login": "IsaacGemal",
+      "contributions": 1
+    },
+    {
+      "login": "kevinji",
+      "contributions": 1
+    },
+    {
+      "login": "klukaszek",
+      "contributions": 1
+    },
+    {
+      "login": "mlajtos",
+      "contributions": 1
+    },
+    {
+      "login": "MoRevolution",
+      "contributions": 1
+    },
+    {
+      "login": "olli4",
+      "contributions": 1
+    },
+    {
+      "login": "Modjular",
+      "contributions": 1
+    },
+    {
+      "login": "elrensmin",
+      "contributions": 1
+    }
+  ],
+  "checked_date": "2026-10-13",
+  "releases": [
+    {
+      "tag_name": "jax/v0.1.26",
+      "published_at": "2026-10-13T05:47:15Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.25",
+      "published_at": "2026-09-16T23:34:05Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.24",
+      "published_at": "2026-08-31T15:35:47Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.23",
+      "published_at": "2026-08-17T01:58:24Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.22",
+      "published_at": "2026-08-13T01:42:39Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "loaders/v0.1.3",
+      "published_at": "2026-08-07T15:39:43Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.21",
+      "published_at": "2026-08-07T15:40:00Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.20",
+      "published_at": "2026-07-28T03:11:44Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.19",
+      "published_at": "2026-07-26T21:32:35Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "onnx/v0.1.2",
+      "published_at": "2026-07-05T22:41:20Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.18",
+      "published_at": "2026-07-05T22:41:53Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.17",
+      "published_at": "2026-07-04T17:47:21Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "onnx/v0.1.1",
+      "published_at": "2026-06-24T00:15:55Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.16",
+      "published_at": "2026-06-24T00:16:47Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "loaders/v0.1.2",
+      "published_at": "2026-06-23T03:40:05Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.15",
+      "published_at": "2026-06-23T03:40:32Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.14",
+      "published_at": "2026-06-21T03:04:02Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.13",
+      "published_at": "2026-06-18T03:33:50Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "onnx/v0.1.0",
+      "published_at": "2026-06-12T04:09:33Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.12",
+      "published_at": "2026-06-12T04:08:53Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.11",
+      "published_at": "2026-04-05T18:50:52Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.10",
+      "published_at": "2026-03-16T00:32:17Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.9",
+      "published_at": "2026-02-08T22:25:14Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.8",
+      "published_at": "2026-02-06T07:28:06Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "loaders/v0.1.1",
+      "published_at": "2026-01-23T17:47:24Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.7",
+      "published_at": "2026-01-23T17:49:51Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.6",
+      "published_at": "2026-01-18T03:32:36Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.5",
+      "published_at": "2026-01-08T07:41:13Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "optax/v0.1.2",
+      "published_at": "2026-01-02T02:00:26Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.4",
+      "published_at": "2026-01-02T01:59:18Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "optax/v0.1.1",
+      "published_at": "2025-12-27T00:41:12Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.3",
+      "published_at": "2025-12-25T00:14:42Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.2",
+      "published_at": "2025-12-23T00:12:44Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.1",
+      "published_at": "2025-12-20T01:40:06Z",
+      "prerelease": false
+    },
+    {
+      "tag_name": "jax/v0.1.0",
+      "published_at": "2025-12-20T01:39:07Z",
+      "prerelease": false
+    }
+  ],
+  "recent_main_workflow_runs": [
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T05:45:37Z",
+      "event": "push",
+      "head_sha": "c169036a326e8888ad757239b08b25c6227fd611"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-13T05:44:46Z",
+      "event": "push",
+      "head_sha": "8f1078ab3a69d6b713f4373533f4da809f323090"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-04T00:53:48Z",
+      "event": "push",
+      "head_sha": "7ab7eaac53f93a2966b60c1121832d8cf198952f"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-21T22:50:18Z",
+      "event": "push",
+      "head_sha": "fd9002453905560cff3e8bb4abde744d1d4c92f2"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-20T15:33:22Z",
+      "event": "push",
+      "head_sha": "5a058e330cecc8c02fe0bf516e74a50e4a34125b"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-17T07:23:05Z",
+      "event": "push",
+      "head_sha": "6d3fcf04922e500c809f9f7f8c169b834d5df8c3"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-16T23:33:12Z",
+      "event": "push",
+      "head_sha": "bd581f70b0b72453174c5d8c5c2fa3eeb22735df"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-16T23:27:09Z",
+      "event": "push",
+      "head_sha": "cab98eb5aeaa6e37933b69f970a8f415dd303b69"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-16T22:59:22Z",
+      "event": "push",
+      "head_sha": "374507e9274b8b4d07c114c449938af7b68bdcc8"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-16T22:51:55Z",
+      "event": "push",
+      "head_sha": "0e309ee20ee47a62b4e8860b2a17e81beac7a5a0"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-09-16T21:53:58Z",
+      "event": "push",
+      "head_sha": "c42c6422f7c3da1a304e6e1fc9034273290a5d00"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-10T12:57:55Z",
+      "event": "push",
+      "head_sha": "ef32174b3b64e44422f148078ac0cacdf50384aa"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-06T14:37:14Z",
+      "event": "push",
+      "head_sha": "970fa22d934ce2e617cd3a993c6ecc8b736496f2"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-31T15:35:24Z",
+      "event": "push",
+      "head_sha": "5b57241e68d7ba01c1b4fb32848f43f291c4c173"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-31T15:33:11Z",
+      "event": "push",
+      "head_sha": "c6be6cf4453689df652b52c50fb2d959df5463ca"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-27T23:27:02Z",
+      "event": "push",
+      "head_sha": "8eb3a0ed757bf99b43db20ee98d7c24048f9985a"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-27T17:36:34Z",
+      "event": "push",
+      "head_sha": "faeadd2b861418d745d1563437be3a63d2d6dd3a"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-27T17:27:43Z",
+      "event": "push",
+      "head_sha": "70fa903dab4fb4d1e21a8625d41a11673e6458f0"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-27T17:27:30Z",
+      "event": "push",
+      "head_sha": "2a0de83b121d9806b0ef50cc93c3dccfca21a4b5"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-22T18:57:05Z",
+      "event": "push",
+      "head_sha": "631c97117c2a2856254c9693028ca085c03aed2f"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-20T01:54:26Z",
+      "event": "push",
+      "head_sha": "4014cc4979c76257ba160d6dc8fc4c978d03e0c4"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-17T01:58:11Z",
+      "event": "push",
+      "head_sha": "f787aa9586b96991c1aa3ea7afedbe4fe15ac53b"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-17T01:51:13Z",
+      "event": "push",
+      "head_sha": "134bfe2882b1ebc40bfe0d34442ab1f9852997fb"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-16T18:35:36Z",
+      "event": "push",
+      "head_sha": "57ebe3a81e34287382315f3fd6ead37d762b04eb"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-15T23:27:31Z",
+      "event": "push",
+      "head_sha": "7ad6ad8fa37dd78a7fbb6dba854d5bbadf4b496c"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-15T23:27:01Z",
+      "event": "push",
+      "head_sha": "b46a63ac726ec54334388ef14e7363a715db8ee3"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-14T16:20:45Z",
+      "event": "push",
+      "head_sha": "a53da4d630302833bf5704fbc1a6fbae5f52f558"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-14T02:11:27Z",
+      "event": "push",
+      "head_sha": "2a9adce942efa6a1f0ac0651658721cc2bf8acdb"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-13T01:42:22Z",
+      "event": "push",
+      "head_sha": "34523e4baaf8ef1b069a7fc6fdbe70545c3b754f"
+    },
+    {
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-08-13T01:40:13Z",
+      "event": "push",
+      "head_sha": "bbdd1e3efe3e245ce4d6afc24045462ed06228d7"
+    }
+  ],
+  "items_updated_since_20260715": [
+    {
+      "title": "Use integer textures for WebGL buffer storage",
+      "author": "ekzhang",
+      "updated_at": "2026-10-13T05:44:45Z",
+      "closed_at": "2026-10-13T05:44:44Z",
+      "comments": 0,
+      "number": 229,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-10-13T05:33:27Z"
+    },
+    {
+      "title": "@jax-js/optax: adam cannot run inside jit (treeBiasCorrection calls count.item())",
+      "author": "pianojay",
+      "updated_at": "2026-10-13T05:33:31Z",
+      "closed_at": null,
+      "comments": 1,
+      "number": 228,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2026-10-12T13:15:33Z"
+    },
+    {
+      "title": "WebGL: comparison ops (less/greater/lessEqual) return all false, so nn.leakyRelu ignores negativeSlope",
+      "author": "pianojay",
+      "updated_at": "2026-10-13T05:44:45Z",
+      "closed_at": "2026-10-13T05:44:45Z",
+      "comments": 1,
+      "number": 227,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-10-12T13:15:31Z"
+    },
+    {
+      "title": "Fix functions that should promote to float",
+      "author": "ekzhang",
+      "updated_at": "2026-10-04T00:53:46Z",
+      "closed_at": "2026-10-04T00:53:45Z",
+      "comments": 0,
+      "number": 226,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-10-04T00:39:56Z"
+    },
+    {
+      "title": "divide() silently truncates, floorDivide() and divmod() throw error when the divisor is a plain number",
+      "author": "ipranjalks",
+      "updated_at": "2026-10-04T00:53:46Z",
+      "closed_at": "2026-10-04T00:53:46Z",
+      "comments": 1,
+      "number": 225,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-27T14:29:23Z"
+    },
+    {
+      "title": "Fix: logaddexp and logaddexp2() return NaN for infinite inputs",
+      "author": "ipranjalks",
+      "updated_at": "2026-09-22T03:29:32Z",
+      "closed_at": "2026-09-21T22:50:15Z",
+      "comments": 0,
+      "number": 224,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-21T17:00:52Z"
+    },
+    {
+      "title": "logaddexp() and logaddexp2() return NaN for infinite inputs",
+      "author": "ipranjalks",
+      "updated_at": "2026-09-21T22:50:16Z",
+      "closed_at": "2026-09-21T22:50:16Z",
+      "comments": 1,
+      "number": 223,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-21T13:04:24Z"
+    },
+    {
+      "title": "Fix: power() returns NaN for 0^0 and (+-1)^(+-inf).",
+      "author": "ipranjalks",
+      "updated_at": "2026-09-21T16:13:05Z",
+      "closed_at": "2026-09-20T15:33:19Z",
+      "comments": 0,
+      "number": 222,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-20T05:26:16Z"
+    },
+    {
+      "title": "power() returns NaN for 0^0 and (±1)^(±inf)",
+      "author": "ipranjalks",
+      "updated_at": "2026-09-20T15:33:20Z",
+      "closed_at": "2026-09-20T15:33:20Z",
+      "comments": 1,
+      "number": 221,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-19T12:18:04Z"
+    },
+    {
+      "title": "Implement bitwiseCount as a primitive",
+      "author": "ekzhang",
+      "updated_at": "2026-09-16T23:27:08Z",
+      "closed_at": "2026-09-16T23:27:07Z",
+      "comments": 0,
+      "number": 220,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-16T23:15:32Z"
+    },
+    {
+      "title": "Fix uint32 optimizer wrapping",
+      "author": "ekzhang",
+      "updated_at": "2026-09-16T22:59:20Z",
+      "closed_at": "2026-09-16T22:59:19Z",
+      "comments": 0,
+      "number": 219,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-16T22:15:35Z"
+    },
+    {
+      "title": "Fix arcsinh() returning -Infinity for large negative inputs",
+      "author": "MaxFreedomPollard",
+      "updated_at": "2026-09-16T22:04:50Z",
+      "closed_at": "2026-09-16T22:04:50Z",
+      "comments": 1,
+      "number": 218,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-15T23:09:40Z"
+    },
+    {
+      "title": "Add jax.numpy.bitwise_count",
+      "author": "ipranjalks",
+      "updated_at": "2026-09-21T16:13:08Z",
+      "closed_at": "2026-09-16T23:27:08Z",
+      "comments": 2,
+      "number": 217,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-14T13:39:34Z"
+    },
+    {
+      "title": "Bug: uint32 subtraction silently returns the wrong result (negative() yields 0)",
+      "author": "ipranjalks",
+      "updated_at": "2026-09-16T22:59:20Z",
+      "closed_at": "2026-09-16T22:59:20Z",
+      "comments": 1,
+      "number": 216,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-14T13:28:53Z"
+    },
+    {
+      "title": "Fix sign() returning 1 for NaN",
+      "author": "MaxFreedomPollard",
+      "updated_at": "2026-09-10T12:57:53Z",
+      "closed_at": "2026-09-10T12:57:53Z",
+      "comments": 0,
+      "number": 215,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-10T12:28:48Z"
+    },
+    {
+      "title": "Fix copysign() dropping the magnitude when y is zero",
+      "author": "MaxFreedomPollard",
+      "updated_at": "2026-09-06T14:38:12Z",
+      "closed_at": "2026-09-06T14:37:11Z",
+      "comments": 0,
+      "number": 214,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-09-06T08:52:37Z"
+    },
+    {
+      "title": "Inference engine",
+      "author": "ekzhang",
+      "updated_at": "2026-09-04T04:20:47Z",
+      "closed_at": null,
+      "comments": 0,
+      "number": 213,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2026-09-04T04:20:47Z"
+    },
+    {
+      "title": "Add jax.numpy.nancumsum",
+      "author": "dtran24",
+      "updated_at": "2026-08-27T23:26:59Z",
+      "closed_at": "2026-08-27T23:26:59Z",
+      "comments": 0,
+      "number": 212,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-27T18:25:03Z"
+    },
+    {
+      "title": "Add nan* functions",
+      "author": "dtran24",
+      "updated_at": "2026-08-31T15:33:08Z",
+      "closed_at": "2026-08-31T15:33:08Z",
+      "comments": 3,
+      "number": 211,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-26T18:57:04Z"
+    },
+    {
+      "title": "Add jax.numpy.nanprod",
+      "author": "dtran24",
+      "updated_at": "2026-08-27T17:36:32Z",
+      "closed_at": "2026-08-27T17:36:32Z",
+      "comments": 0,
+      "number": 210,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-25T15:49:43Z"
+    },
+    {
+      "title": "Add jax.numpy.nancumprod",
+      "author": "dtran24",
+      "updated_at": "2026-08-27T17:27:41Z",
+      "closed_at": "2026-08-27T17:27:41Z",
+      "comments": 0,
+      "number": 209,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-24T21:18:35Z"
+    },
+    {
+      "title": "Add jax.numpy.nansum",
+      "author": "dtran24",
+      "updated_at": "2026-08-27T17:27:27Z",
+      "closed_at": "2026-08-27T17:27:27Z",
+      "comments": 0,
+      "number": 208,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-24T03:50:20Z"
+    },
+    {
+      "title": "Add jax.numpy.trilIndices",
+      "author": "dtran24",
+      "updated_at": "2026-08-21T19:05:59Z",
+      "closed_at": null,
+      "comments": 0,
+      "number": 207,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2026-08-21T19:05:59Z"
+    },
+    {
+      "title": "Add jax.numpy.polyint",
+      "author": "dtran24",
+      "updated_at": "2026-08-22T18:57:20Z",
+      "closed_at": null,
+      "comments": 0,
+      "number": 206,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2026-08-20T22:02:33Z"
+    },
+    {
+      "title": "Add jax.numpy.select",
+      "author": "dtran24",
+      "updated_at": "2026-08-20T01:54:24Z",
+      "closed_at": "2026-08-20T01:54:24Z",
+      "comments": 0,
+      "number": 205,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-19T15:58:57Z"
+    },
+    {
+      "title": "Add jax.numpy.triuIndices",
+      "author": "dtran24",
+      "updated_at": "2026-08-19T03:32:01Z",
+      "closed_at": null,
+      "comments": 0,
+      "number": 204,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2026-08-19T03:32:01Z"
+    },
+    {
+      "title": "Add jax.numpy.polyder",
+      "author": "dtran24",
+      "updated_at": "2026-08-22T18:57:03Z",
+      "closed_at": "2026-08-22T18:57:03Z",
+      "comments": 0,
+      "number": 203,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-17T18:55:00Z"
+    },
+    {
+      "title": "Add jax.numpy.polymul",
+      "author": "dtran24",
+      "updated_at": "2026-08-16T18:35:34Z",
+      "closed_at": "2026-08-16T18:35:34Z",
+      "comments": 0,
+      "number": 202,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-16T15:50:34Z"
+    },
+    {
+      "title": "Add jax.numpy.fromfunction",
+      "author": "dtran24",
+      "updated_at": "2026-08-16T01:04:09Z",
+      "closed_at": "2026-08-15T23:26:59Z",
+      "comments": 1,
+      "number": 201,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-15T21:39:44Z"
+    },
+    {
+      "title": "Add jax.numpy.modf",
+      "author": "dtran24",
+      "updated_at": "2026-08-15T23:27:29Z",
+      "closed_at": "2026-08-15T23:27:29Z",
+      "comments": 0,
+      "number": 200,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-15T03:30:08Z"
+    },
+    {
+      "title": "Add nn.log1mexp",
+      "author": "dtran24",
+      "updated_at": "2026-08-14T16:20:43Z",
+      "closed_at": "2026-08-14T16:20:42Z",
+      "comments": 0,
+      "number": 199,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-14T05:00:04Z"
+    },
+    {
+      "title": "Add jax.numpy.unwrap",
+      "author": "dtran24",
+      "updated_at": "2026-08-14T02:11:24Z",
+      "closed_at": "2026-08-14T02:11:24Z",
+      "comments": 0,
+      "number": 198,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-13T04:54:13Z"
+    },
+    {
+      "title": "Fix tolerances for FFT tests",
+      "author": "ekzhang",
+      "updated_at": "2026-08-13T01:09:24Z",
+      "closed_at": "2026-08-13T01:09:23Z",
+      "comments": 0,
+      "number": 197,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-13T01:04:55Z"
+    },
+    {
+      "title": "Faster cumulative ops, fix broadcast bug",
+      "author": "ekzhang",
+      "updated_at": "2026-08-13T01:15:53Z",
+      "closed_at": "2026-08-13T01:12:49Z",
+      "comments": 1,
+      "number": 196,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-13T00:59:41Z"
+    },
+    {
+      "title": "Add jax.numpy.trapezoid",
+      "author": "dtran24",
+      "updated_at": "2026-08-13T00:16:24Z",
+      "closed_at": "2026-08-13T00:16:24Z",
+      "comments": 0,
+      "number": 195,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-11T21:21:22Z"
+    },
+    {
+      "title": "Add upload button to mobileclip example",
+      "author": "Modjular",
+      "updated_at": "2026-08-13T00:20:17Z",
+      "closed_at": "2026-08-13T00:20:17Z",
+      "comments": 2,
+      "number": 194,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-11T19:53:44Z"
+    },
+    {
+      "title": "Add jax.numpy.polyval",
+      "author": "dtran24",
+      "updated_at": "2026-08-13T01:00:06Z",
+      "closed_at": "2026-08-13T00:28:50Z",
+      "comments": 1,
+      "number": 193,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-11T04:10:43Z"
+    },
+    {
+      "title": "Add jax.numpy.isdtype",
+      "author": "dtran24",
+      "updated_at": "2026-08-11T01:13:24Z",
+      "closed_at": null,
+      "comments": 0,
+      "number": 192,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2026-08-11T01:11:50Z"
+    },
+    {
+      "title": "Add jax.numpy.ediff1d",
+      "author": "dtran24",
+      "updated_at": "2026-08-13T01:28:41Z",
+      "closed_at": "2026-08-13T01:28:41Z",
+      "comments": 1,
+      "number": 191,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-10T22:52:44Z"
+    },
+    {
+      "title": "Add jax.numpy.geomspace",
+      "author": "dtran24",
+      "updated_at": "2026-08-13T01:09:58Z",
+      "closed_at": "2026-08-13T01:09:58Z",
+      "comments": 0,
+      "number": 190,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-10T15:37:21Z"
+    },
+    {
+      "title": "Add jax.numpy.diff",
+      "author": "dtran24",
+      "updated_at": "2026-08-13T01:40:11Z",
+      "closed_at": "2026-08-13T01:40:11Z",
+      "comments": 0,
+      "number": 189,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-10T02:14:38Z"
+    },
+    {
+      "title": "Add jax.numpy.canCast",
+      "author": "dtran24",
+      "updated_at": "2026-08-13T04:54:50Z",
+      "closed_at": null,
+      "comments": 2,
+      "number": 188,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2026-08-08T22:54:35Z"
+    },
+    {
+      "title": "Add jax.numpy.linalg.norm",
+      "author": "dtran24",
+      "updated_at": "2026-08-12T18:14:27Z",
+      "closed_at": "2026-08-12T18:14:27Z",
+      "comments": 0,
+      "number": 187,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-08T22:20:47Z"
+    },
+    {
+      "title": "Fix mean() truncating integer and boolean inputs",
+      "author": "elrensmin",
+      "updated_at": "2026-08-08T16:00:39Z",
+      "closed_at": "2026-08-08T16:00:39Z",
+      "comments": 1,
+      "number": 186,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-08T15:17:23Z"
+    },
+    {
+      "title": "Add jax.numpy.indices",
+      "author": "dtran24",
+      "updated_at": "2026-08-13T01:18:45Z",
+      "closed_at": "2026-08-13T01:18:45Z",
+      "comments": 0,
+      "number": 185,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-08T04:27:07Z"
+    },
+    {
+      "title": "Add jax.numpy.diagflat",
+      "author": "dtran24",
+      "updated_at": "2026-08-08T16:20:36Z",
+      "closed_at": "2026-08-08T16:20:36Z",
+      "comments": 0,
+      "number": 184,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-08T03:29:59Z"
+    },
+    {
+      "title": "Add jax.numpy.vsplit",
+      "author": "dtran24",
+      "updated_at": "2026-08-08T16:05:48Z",
+      "closed_at": "2026-08-08T16:05:48Z",
+      "comments": 0,
+      "number": 183,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-07T17:11:34Z"
+    },
+    {
+      "title": "Add LFM2.5-350M support to /chat page",
+      "author": "ekzhang",
+      "updated_at": "2026-08-07T15:28:41Z",
+      "closed_at": "2026-08-07T15:28:40Z",
+      "comments": 0,
+      "number": 182,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-07T15:23:11Z"
+    },
+    {
+      "title": "[tuner] Prefer upcast of 4 over 3",
+      "author": "ekzhang",
+      "updated_at": "2026-08-07T15:15:27Z",
+      "closed_at": "2026-08-07T15:15:26Z",
+      "comments": 0,
+      "number": 181,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-07T15:11:01Z"
+    },
+    {
+      "title": "Fix GQA semantics for attention heads",
+      "author": "ekzhang",
+      "updated_at": "2026-08-07T15:16:43Z",
+      "closed_at": "2026-08-07T15:16:42Z",
+      "comments": 0,
+      "number": 180,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-07T15:10:45Z"
+    },
+    {
+      "title": "[loaders] Fix parse of special tokens",
+      "author": "ekzhang",
+      "updated_at": "2026-08-07T15:15:47Z",
+      "closed_at": "2026-08-07T15:15:46Z",
+      "comments": 0,
+      "number": 179,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-07T15:10:35Z"
+    },
+    {
+      "title": "Add jax.numpy.resultType",
+      "author": "dtran24",
+      "updated_at": "2026-08-07T14:29:51Z",
+      "closed_at": "2026-08-07T14:29:51Z",
+      "comments": 0,
+      "number": 178,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-07T02:20:45Z"
+    },
+    {
+      "title": "Add jax.numpy.polysub",
+      "author": "dtran24",
+      "updated_at": "2026-08-07T15:34:46Z",
+      "closed_at": "2026-08-07T15:34:46Z",
+      "comments": 0,
+      "number": 177,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-06T23:33:12Z"
+    },
+    {
+      "title": "Add jax.numpy.unstack",
+      "author": "dtran24",
+      "updated_at": "2026-08-07T00:29:08Z",
+      "closed_at": "2026-08-07T00:29:08Z",
+      "comments": 0,
+      "number": 176,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-06T20:50:49Z"
+    },
+    {
+      "title": "Add jax.numpy.polyadd",
+      "author": "dtran24",
+      "updated_at": "2026-08-07T15:12:56Z",
+      "closed_at": "2026-08-07T15:12:56Z",
+      "comments": 0,
+      "number": 175,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-06T20:18:48Z"
+    },
+    {
+      "title": "Add jax.numpy.isscalar",
+      "author": "dtran24",
+      "updated_at": "2026-08-07T00:52:48Z",
+      "closed_at": "2026-08-07T00:52:48Z",
+      "comments": 0,
+      "number": 174,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-06T19:42:13Z"
+    },
+    {
+      "title": "Add jax.numpy.hsplit",
+      "author": "dtran24",
+      "updated_at": "2026-08-07T00:53:17Z",
+      "closed_at": "2026-08-07T00:53:17Z",
+      "comments": 0,
+      "number": 173,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-06T19:34:19Z"
+    },
+    {
+      "title": "Add jax.numpy.isin",
+      "author": "dtran24",
+      "updated_at": "2026-08-06T00:46:59Z",
+      "closed_at": "2026-08-06T00:46:59Z",
+      "comments": 0,
+      "number": 172,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-05T22:59:43Z"
+    },
+    {
+      "title": "Add jax.numpy.bartlett",
+      "author": "dtran24",
+      "updated_at": "2026-08-06T01:23:00Z",
+      "closed_at": "2026-08-06T00:45:39Z",
+      "comments": 2,
+      "number": 171,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-05T20:31:27Z"
+    },
+    {
+      "title": "Add jax.numpy.fmax",
+      "author": "dtran24",
+      "updated_at": "2026-08-06T02:20:01Z",
+      "closed_at": "2026-08-06T02:20:01Z",
+      "comments": 3,
+      "number": 170,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-05T19:44:04Z"
+    },
+    {
+      "title": "Add jax.numpy.fmin",
+      "author": "dtran24",
+      "updated_at": "2026-08-06T00:48:00Z",
+      "closed_at": "2026-08-06T00:48:00Z",
+      "comments": 0,
+      "number": 169,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-05T19:38:42Z"
+    },
+    {
+      "title": "Add jax.numpy.diagIndicesFrom",
+      "author": "dtran24",
+      "updated_at": "2026-08-06T02:15:17Z",
+      "closed_at": "2026-08-06T02:15:17Z",
+      "comments": 0,
+      "number": 168,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-05T19:26:01Z"
+    },
+    {
+      "title": "Add jax.numpy.floatPower",
+      "author": "dtran24",
+      "updated_at": "2026-08-04T23:06:26Z",
+      "closed_at": "2026-08-04T23:06:26Z",
+      "comments": 0,
+      "number": 167,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-04T20:29:49Z"
+    },
+    {
+      "title": "Add jax.numpy.dsplit",
+      "author": "dtran24",
+      "updated_at": "2026-08-04T23:07:04Z",
+      "closed_at": "2026-08-04T23:07:04Z",
+      "comments": 0,
+      "number": 166,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-04T20:12:42Z"
+    },
+    {
+      "title": "Reuse array references in diagIndices",
+      "author": "dtran24",
+      "updated_at": "2026-08-04T19:15:04Z",
+      "closed_at": "2026-08-04T19:15:04Z",
+      "comments": 0,
+      "number": 165,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-04T14:35:34Z"
+    },
+    {
+      "title": "Add jax.numpy.diagIndices",
+      "author": "dtran24",
+      "updated_at": "2026-08-03T23:19:14Z",
+      "closed_at": "2026-08-03T23:19:14Z",
+      "comments": 0,
+      "number": 164,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-03T22:18:14Z"
+    },
+    {
+      "title": "Add jax.numpy.blackman",
+      "author": "dtran24",
+      "updated_at": "2026-08-03T23:17:00Z",
+      "closed_at": "2026-08-03T23:17:00Z",
+      "comments": 0,
+      "number": 163,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-03T21:58:08Z"
+    },
+    {
+      "title": "Fix stale API documentation links",
+      "author": "dtran24",
+      "updated_at": "2026-08-03T23:13:04Z",
+      "closed_at": "2026-08-03T23:13:03Z",
+      "comments": 0,
+      "number": 162,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-03T20:54:37Z"
+    },
+    {
+      "title": "Add jax.numpy.signbit",
+      "author": "dtran24",
+      "updated_at": "2026-08-04T00:16:55Z",
+      "closed_at": "2026-08-04T00:16:55Z",
+      "comments": 2,
+      "number": 161,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-03T16:10:47Z"
+    },
+    {
+      "title": "Add jax.numpy.signbit",
+      "author": "dtran24",
+      "updated_at": "2026-08-04T00:16:56Z",
+      "closed_at": "2026-08-04T00:16:56Z",
+      "comments": 1,
+      "number": 160,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-02T23:07:53Z"
+    },
+    {
+      "title": "Add jax.numpy.arraySplit",
+      "author": "dtran24",
+      "updated_at": "2026-08-02T22:18:53Z",
+      "closed_at": "2026-08-02T22:18:53Z",
+      "comments": 1,
+      "number": 159,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-02T18:57:33Z"
+    },
+    {
+      "title": "Add jax.numpy.countNonzero",
+      "author": "dtran24",
+      "updated_at": "2026-08-02T15:49:46Z",
+      "closed_at": "2026-08-02T15:49:46Z",
+      "comments": 0,
+      "number": 158,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-08-01T02:11:12Z"
+    },
+    {
+      "title": "Performance improvements for Wasm TTS",
+      "author": "ekzhang",
+      "updated_at": "2026-07-27T04:59:40Z",
+      "closed_at": "2026-07-27T04:59:39Z",
+      "comments": 0,
+      "number": 157,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-07-27T04:53:38Z"
+    },
+    {
+      "title": "Fix Wasm memory allocator capping at 2 GiB",
+      "author": "ekzhang",
+      "updated_at": "2026-07-27T00:51:20Z",
+      "closed_at": "2026-07-27T00:51:18Z",
+      "comments": 0,
+      "number": 156,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-07-27T00:46:05Z"
+    },
+    {
+      "title": "Backprop for gather/sort via `scatter`",
+      "author": "ekzhang",
+      "updated_at": "2026-07-26T21:29:09Z",
+      "closed_at": "2026-07-26T21:29:08Z",
+      "comments": 0,
+      "number": 155,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-07-26T21:25:23Z"
+    },
+    {
+      "title": "Fix batched sort and argsort JVP rules",
+      "author": "ekzhang",
+      "updated_at": "2026-07-26T20:19:20Z",
+      "closed_at": "2026-07-26T20:19:18Z",
+      "comments": 0,
+      "number": 154,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-07-26T19:58:52Z"
+    },
+    {
+      "title": "Make allocation contents unspecified",
+      "author": "ekzhang",
+      "updated_at": "2026-07-26T20:16:31Z",
+      "closed_at": "2026-07-26T20:16:30Z",
+      "comments": 0,
+      "number": 153,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-07-26T19:56:16Z"
+    },
+    {
+      "title": "Fix eager-mode grad materializing m,n,k array",
+      "author": "ekzhang",
+      "updated_at": "2026-07-26T18:20:09Z",
+      "closed_at": "2026-07-26T18:20:08Z",
+      "comments": 0,
+      "number": 152,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-07-26T18:16:30Z"
+    },
+    {
+      "title": "Letting a jitted training loop run ahead (sync every N steps) is ~2x slower than blocking after every step",
+      "author": "NeoVand",
+      "updated_at": "2026-08-11T15:30:59Z",
+      "closed_at": "2026-07-28T15:53:54Z",
+      "comments": 3,
+      "number": 151,
+      "is_pr": false,
+      "labels": [
+        "question"
+      ],
+      "state": "closed",
+      "created_at": "2026-07-23T03:53:42Z"
+    },
+    {
+      "title": "Eager-mode grad of matmul materializes the full M×K×N intermediate (8 GiB allocation at [2048,256] @ [256,4096])",
+      "author": "NeoVand",
+      "updated_at": "2026-07-26T18:20:09Z",
+      "closed_at": "2026-07-26T18:20:09Z",
+      "comments": 1,
+      "number": 150,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-07-23T03:53:41Z"
+    },
+    {
+      "title": "Work around Firefox's 100ms WebGPU completion poll",
+      "author": "MoRevolution",
+      "updated_at": "2026-09-23T16:04:13Z",
+      "closed_at": "2026-08-17T01:51:10Z",
+      "comments": 10,
+      "number": 124,
+      "is_pr": true,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-06-22T05:31:55Z"
+    },
+    {
+      "title": "WebGPU much slower on Firefox (per-op IPC + per-frame readback)",
+      "author": "MoRevolution",
+      "updated_at": "2026-08-17T01:51:11Z",
+      "closed_at": "2026-08-17T01:51:11Z",
+      "comments": 0,
+      "number": 123,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-06-22T04:45:28Z"
+    },
+    {
+      "title": "ESLint plugin",
+      "author": "olli4",
+      "updated_at": "2026-07-26T18:23:46Z",
+      "closed_at": "2026-07-26T18:23:46Z",
+      "comments": 2,
+      "number": 82,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-02-11T19:26:36Z"
+    },
+    {
+      "title": "Implement scatter() and scatter_add()",
+      "author": "ekzhang",
+      "updated_at": "2026-07-26T21:29:09Z",
+      "closed_at": "2026-07-26T21:29:09Z",
+      "comments": 2,
+      "number": 79,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "closed",
+      "created_at": "2026-02-08T22:30:37Z"
+    },
+    {
+      "title": "Faster streaming attention",
+      "author": "ekzhang",
+      "updated_at": "2026-07-26T17:20:52Z",
+      "closed_at": null,
+      "comments": 1,
+      "number": 66,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2026-01-28T23:15:22Z"
+    },
+    {
+      "title": "🎁 Request a new function",
+      "author": "ekzhang",
+      "updated_at": "2026-08-02T22:15:56Z",
+      "closed_at": null,
+      "comments": 3,
+      "number": 26,
+      "is_pr": false,
+      "labels": [
+        null
+      ],
+      "state": "open",
+      "created_at": "2025-12-29T16:56:12Z"
+    }
+  ]
+}

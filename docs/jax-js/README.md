@@ -2,6 +2,8 @@
 
 This branch starts from main commit `7a504a3` and ports the four existing families to jax-js 0.1.26. Main's mathematical setup and family explanations are retained. TF.js remains available for comparison and PyTorch server code is unchanged.
 
+**Working direction (2026-10-13):** the owner selected PyTorch + jax-js. jax-js is the working browser runtime; TF.js is a retained comparison baseline. See the [upstream assessment and maintenance policy](upstream-assessment.md). Main integration is a separate operation.
+
 - [Contract](contract.md): scope, ownership, numerical equivalence, and acceptance gates.
 - [Findings](findings.md): implementation changes, measured results, and unresolved questions.
 - [GUI comparison](gui-comparison.md): repeated three-runtime measurements with the actual views.
